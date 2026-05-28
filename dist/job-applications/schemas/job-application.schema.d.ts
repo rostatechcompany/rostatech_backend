@@ -11,8 +11,8 @@ export declare class JobApplication {
     skills: string;
     workExperience: string;
     portfolio: string;
-    cooperationType: string;
     jobTitle: string;
+    cooperationTypes?: string[];
     status: string;
     adminNotes: string;
 }
@@ -115,7 +115,7 @@ export declare const JobApplicationSchema: MongooseSchema<JobApplication, import
     }, "id"> & {
         id: string;
     }> | undefined;
-    cooperationType?: import("mongoose").SchemaDefinitionProperty<string, JobApplication, Document<unknown, {}, JobApplication, {
+    jobTitle?: import("mongoose").SchemaDefinitionProperty<string, JobApplication, Document<unknown, {}, JobApplication, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<JobApplication & {
         _id: import("mongoose").Types.ObjectId;
@@ -124,7 +124,7 @@ export declare const JobApplicationSchema: MongooseSchema<JobApplication, import
     }, "id"> & {
         id: string;
     }> | undefined;
-    jobTitle?: import("mongoose").SchemaDefinitionProperty<string, JobApplication, Document<unknown, {}, JobApplication, {
+    cooperationTypes?: import("mongoose").SchemaDefinitionProperty<string[] | undefined, JobApplication, Document<unknown, {}, JobApplication, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<JobApplication & {
         _id: import("mongoose").Types.ObjectId;

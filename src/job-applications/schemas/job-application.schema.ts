@@ -38,20 +38,11 @@ export class JobApplication {
   @Prop({ required: true })
   portfolio!: string; 
 
-  // Admin-managed selections
-  @Prop({ 
-    type: MongooseSchema.Types.ObjectId, 
-    ref: 'JobPosition',
-    required: true 
-  })
-  cooperationType!: string;
+  @Prop({ required: true })
+  jobTitle!: string;
 
-  @Prop({ 
-    type: MongooseSchema.Types.ObjectId, 
-    ref: 'JobPosition',
-    required: true 
-  })
-  jobTitle!: string; 
+  @Prop({ type: [String], required: true })
+  cooperationTypes?: string[];
 
   // Application status for admin
   @Prop({ 

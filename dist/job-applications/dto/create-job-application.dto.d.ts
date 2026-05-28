@@ -9,6 +9,6 @@ export declare class CreateJobApplicationDto {
     skills: string;
     workExperience: string;
     portfolio: string;
-    cooperationType: string;
+    cooperationTypes: string[];
     jobTitle: string;
 }

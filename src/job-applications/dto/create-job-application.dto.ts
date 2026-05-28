@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsNotEmpty, IsMongoId } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, IsMongoId, ArrayNotEmpty, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateJobApplicationDto {
@@ -49,13 +49,13 @@ export class CreateJobApplicationDto {
   @IsString()
   portfolio!: string;
 
-  @ApiProperty({ example: '60d5f484f1a2c8b1f8e4e1a1' })
-  @IsMongoId()
-  @IsNotEmpty()
-  cooperationType!: string;
+  @ApiProperty({example: ['60d5f484f1a2c8b1f8e4e1a1', '60d5f484f1a2c8b1f8e4e1a2'],})
+  @IsArray()
+  // @ArrayNotEmpty()
+  @IsMongoId({ each: true })
+  cooperationTypes!: string[];
 
-  @ApiProperty({ example: '60d5f484f1a2c8b1f8e4e1a2' })
-  @IsMongoId()
+  @ApiProperty({ example: 'برنامه‌نویس ارشد Frontend'})
   @IsNotEmpty()
   jobTitle!: string;
 }

@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JobApplicationSchema = exports.JobApplication = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
-const mongoose_2 = require("mongoose");
 let JobApplication = class JobApplication {
     fullName;
     phoneNumber;
@@ -23,8 +22,8 @@ let JobApplication = class JobApplication {
     skills;
     workExperience;
     portfolio;
-    cooperationType;
     jobTitle;
+    cooperationTypes;
     status;
     adminNotes;
 };
@@ -70,21 +69,13 @@ __decorate([
     __metadata("design:type", String)
 ], JobApplication.prototype, "portfolio", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({
-        type: mongoose_2.Schema.Types.ObjectId,
-        ref: 'JobPosition',
-        required: true
-    }),
-    __metadata("design:type", String)
-], JobApplication.prototype, "cooperationType", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({
-        type: mongoose_2.Schema.Types.ObjectId,
-        ref: 'JobPosition',
-        required: true
-    }),
+    (0, mongoose_1.Prop)({ required: true }),
     __metadata("design:type", String)
 ], JobApplication.prototype, "jobTitle", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: [String], required: true }),
+    __metadata("design:type", Array)
+], JobApplication.prototype, "cooperationTypes", void 0);
 __decorate([
     (0, mongoose_1.Prop)({
         default: 'pending',

@@ -9,36 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JobPositionSchema = exports.JobPosition = exports.PositionType = void 0;
+exports.CooperationTypeSchema = exports.CooperationType = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
-var PositionType;
-(function (PositionType) {
-    PositionType["COOPERATION_TYPE"] = "cooperation_type";
-    PositionType["JOB_TITLE"] = "job_title";
-})(PositionType || (exports.PositionType = PositionType = {}));
-let JobPosition = class JobPosition {
+let CooperationType = class CooperationType {
     title;
-    type;
     isActive;
 };
-exports.JobPosition = JobPosition;
+exports.CooperationType = CooperationType;
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: true, unique: true }),
     __metadata("design:type", String)
-], JobPosition.prototype, "title", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({
-        required: true,
-        enum: PositionType
-    }),
-    __metadata("design:type", String)
-], JobPosition.prototype, "type", void 0);
+], CooperationType.prototype, "title", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: true }),
     __metadata("design:type", Boolean)
-], JobPosition.prototype, "isActive", void 0);
-exports.JobPosition = JobPosition = __decorate([
+], CooperationType.prototype, "isActive", void 0);
+exports.CooperationType = CooperationType = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
-], JobPosition);
-exports.JobPositionSchema = mongoose_1.SchemaFactory.createForClass(JobPosition);
-//# sourceMappingURL=job-position.schema.js.map
+], CooperationType);
+exports.CooperationTypeSchema = mongoose_1.SchemaFactory.createForClass(CooperationType);
+//# sourceMappingURL=cooperation-type.schema.js.map

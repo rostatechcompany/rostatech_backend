@@ -24,10 +24,19 @@ const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../common/decorators/roles.decorator");
 const admin_schema_1 = require("./schemas/admin.schema");
 const change_role_dto_1 = require("./dto/change-role.dto");
+const create_cooperation_type_dto_1 = require("../cooperation-types/dto/create-cooperation-type.dto");
+const update_cooperation_type_dto_1 = require("../cooperation-types/dto/update-cooperation-type.dto");
+const cooperation_types_service_1 = require("../cooperation-types/cooperation-types.service");
+const update_application_dto_1 = require("../job-applications/dto/update-application.dto");
+const job_applications_service_1 = require("../job-applications/job-applications.service");
 let AdminController = class AdminController {
     adminService;
-    constructor(adminService) {
+    cooperationTypesService;
+    jobApplicationsService;
+    constructor(adminService, cooperationTypesService, jobApplicationsService) {
         this.adminService = adminService;
+        this.cooperationTypesService = cooperationTypesService;
+        this.jobApplicationsService = jobApplicationsService;
     }
     findAll(req) {
         return this.adminService.getAllAdmins(req.user);
@@ -61,6 +70,30 @@ let AdminController = class AdminController {
     }
     changeUserPassword(id, changeAdminPasswordDto, req) {
         return this.adminService.changeAdminPassword(id, changeAdminPasswordDto, req.user);
+    }
+    create(dto) {
+        return this.cooperationTypesService.create(dto);
+    }
+    findAllCooperationType() {
+        return this.cooperationTypesService.findAll();
+    }
+    updateCooperationType(id, dto) {
+        return this.cooperationTypesService.update(id, dto);
+    }
+    removeCooperationType(id) {
+        return this.cooperationTypesService.remove(id);
+    }
+    findAllJobReq(status) {
+        return this.jobApplicationsService.findAll(status);
+    }
+    findOneJobReq(id) {
+        return this.jobApplicationsService.findOne(id);
+    }
+    updateJobReq(id, updateDto) {
+        return this.jobApplicationsService.update(id, updateDto);
+    }
+    removeJobReq(id) {
+        return this.jobApplicationsService.remove(id);
     }
 };
 exports.AdminController = AdminController;
@@ -195,9 +228,93 @@ __decorate([
     __metadata("design:paramtypes", [String, change_admin_password_dto_ts_1.ChangeAdminPasswordDto, Object]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "changeUserPassword", null);
+__decorate([
+    (0, common_1.Post)('cooperation-type'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_cooperation_type_dto_1.CreateCooperationTypeDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "create", null);
+__decorate([
+    (0, common_1.Get)('cooperation-type'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findAllCooperationType", null);
+__decorate([
+    (0, common_1.Put)('cooperation-type/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_cooperation_type_dto_1.UpdateCooperationTypeDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updateCooperationType", null);
+__decorate([
+    (0, common_1.Delete)('cooperation-type/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "removeCooperationType", null);
+__decorate([
+    (0, common_1.Get)('job-applications'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiQuery)({ name: 'status', required: false, enum: ['pending', 'accepted', 'rejected'] }),
+    __param(0, (0, common_1.Query)('status')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findAllJobReq", null);
+__decorate([
+    (0, common_1.Get)('job-applications/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findOneJobReq", null);
+__decorate([
+    (0, common_1.Put)('job-applications/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_application_dto_1.UpdateApplicationDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updateJobReq", null);
+__decorate([
+    (0, common_1.Delete)('job-applications/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "removeJobReq", null);
 exports.AdminController = AdminController = __decorate([
     (0, swagger_1.ApiTags)('Admin Management'),
     (0, common_1.Controller)('admin'),
-    __metadata("design:paramtypes", [admin_service_1.AdminService])
+    __metadata("design:paramtypes", [admin_service_1.AdminService,
+        cooperation_types_service_1.CooperationTypesService,
+        job_applications_service_1.JobApplicationsService])
 ], AdminController);
 //# sourceMappingURL=admin.controller.js.map

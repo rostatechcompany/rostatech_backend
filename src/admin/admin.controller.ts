@@ -7,9 +7,10 @@ import {
   Body, 
   Param, 
   UseGuards, 
-  Request 
+  Request,
+  Query,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { ChangeAdminPasswordDto} from './dto/change-admin-password.dto.ts';
@@ -19,11 +20,19 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { AdminRole, AdminStatus} from './schemas/admin.schema';
 import { ChangeRoleDto } from './dto/change-role.dto';
+import { CreateCooperationTypeDto } from '../cooperation-types/dto/create-cooperation-type.dto';
+import { UpdateCooperationTypeDto } from '../cooperation-types/dto/update-cooperation-type.dto';
+import { CooperationTypesService} from '../cooperation-types/cooperation-types.service';
+import { UpdateApplicationDto } from '../job-applications/dto/update-application.dto';
+import { JobApplicationsService} from '../job-applications/job-applications.service';
 
 @ApiTags('Admin Management')
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(private readonly adminService: AdminService,
+              private readonly cooperationTypesService:CooperationTypesService, 
+              private readonly jobApplicationsService: JobApplicationsService,
+  ) {}
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -143,5 +152,82 @@ export class AdminController {
     return this.adminService.changeAdminPassword(id, changeAdminPasswordDto, req.user);
   }
 
+  // for cooperation type
+  // ========================================================
 
+  // create
+  @Post('cooperation-type')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  create(@Body() dto: CreateCooperationTypeDto) {
+    return this.cooperationTypesService.create(dto);
+  }
+
+  // list
+  @Get('cooperation-type')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  findAllCooperationType() {
+    return this.cooperationTypesService.findAll();
+  }
+
+  // edit
+  @Put('cooperation-type/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  updateCooperationType(@Param('id') id: string, @Body() dto: UpdateCooperationTypeDto) {
+    return this.cooperationTypesService.update(id, dto);
+  }
+
+  // delete
+  @Delete('cooperation-type/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  removeCooperationType(@Param('id') id: string) {
+    return this.cooperationTypesService.remove(id);
+  }
+
+  // for job applications 
+  // ==========================================
+  
+  // list
+  @Get('job-applications')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiQuery({ name: 'status', required: false, enum: ['pending', 'accepted', 'rejected'] })
+  findAllJobReq(@Query('status') status?: string) {
+    return this.jobApplicationsService.findAll(status);
+  }
+
+  // detailed
+  @Get('job-applications/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  findOneJobReq(@Param('id') id: string) {
+    return this.jobApplicationsService.findOne(id);
+  }
+
+  // update status / note
+  @Put('job-applications/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  updateJobReq(@Param('id') id: string, @Body() updateDto: UpdateApplicationDto) {
+    return this.jobApplicationsService.update(id, updateDto);
+  }
+
+  // delete
+  @Delete('job-applications/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN )
+  @ApiBearerAuth()
+  removeJobReq(@Param('id') id: string) {
+    return this.jobApplicationsService.remove(id);
+  }
 }

@@ -13,9 +13,9 @@ const mongoose_1 = require("@nestjs/mongoose");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const job_applications_module_1 = require("./job-applications/job-applications.module");
-const job_positions_module_1 = require("./job-positions/job-positions.module");
 const auth_module_1 = require("./auth/auth.module");
 const admin_module_1 = require("./admin/admin.module");
+const cooperation_types_module_1 = require("./cooperation-types/cooperation-types.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -34,9 +34,9 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService],
             }),
             job_applications_module_1.JobApplicationsModule,
-            job_positions_module_1.JobPositionsModule,
             auth_module_1.AuthModule,
             admin_module_1.AdminModule,
+            cooperation_types_module_1.CooperationTypesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

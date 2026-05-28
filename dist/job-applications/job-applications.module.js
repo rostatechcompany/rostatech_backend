@@ -12,7 +12,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const job_applications_service_1 = require("./job-applications.service");
 const job_applications_controller_1 = require("./job-applications.controller");
 const job_application_schema_1 = require("./schemas/job-application.schema");
-const job_position_schema_1 = require("../job-positions/schemas/job-position.schema");
+const cooperation_type_schema_1 = require("../cooperation-types/schemas/cooperation-type.schema");
 let JobApplicationsModule = class JobApplicationsModule {
 };
 exports.JobApplicationsModule = JobApplicationsModule;
@@ -21,11 +21,12 @@ exports.JobApplicationsModule = JobApplicationsModule = __decorate([
         imports: [
             mongoose_1.MongooseModule.forFeature([
                 { name: job_application_schema_1.JobApplication.name, schema: job_application_schema_1.JobApplicationSchema },
-                { name: job_position_schema_1.JobPosition.name, schema: job_position_schema_1.JobPositionSchema },
+                { name: cooperation_type_schema_1.CooperationType.name, schema: cooperation_type_schema_1.CooperationTypeSchema },
             ]),
         ],
         controllers: [job_applications_controller_1.JobApplicationsController],
         providers: [job_applications_service_1.JobApplicationsService],
+        exports: [job_applications_service_1.JobApplicationsService],
     })
 ], JobApplicationsModule);
 //# sourceMappingURL=job-applications.module.js.map

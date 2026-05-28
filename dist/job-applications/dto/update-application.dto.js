@@ -9,18 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JobPositionsController = void 0;
-const common_1 = require("@nestjs/common");
-const job_positions_service_1 = require("./job-positions.service");
-let JobPositionsController = class JobPositionsController {
-    jobPositionsService;
-    constructor(jobPositionsService) {
-        this.jobPositionsService = jobPositionsService;
-    }
-};
-exports.JobPositionsController = JobPositionsController;
-exports.JobPositionsController = JobPositionsController = __decorate([
-    (0, common_1.Controller)('job-positions'),
-    __metadata("design:paramtypes", [job_positions_service_1.JobPositionsService])
-], JobPositionsController);
-//# sourceMappingURL=job-positions.controller.js.map
+exports.UpdateApplicationDto = void 0;
+const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
+class UpdateApplicationDto {
+    status;
+    adminNotes;
+}
+exports.UpdateApplicationDto = UpdateApplicationDto;
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ enum: ['pending', 'accepted', 'rejected'] }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsIn)(['pending', 'accepted', 'rejected']),
+    __metadata("design:type", String)
+], UpdateApplicationDto.prototype, "status", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateApplicationDto.prototype, "adminNotes", void 0);
+//# sourceMappingURL=update-application.dto.js.map

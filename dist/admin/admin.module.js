@@ -13,6 +13,8 @@ const admin_schema_1 = require("./schemas/admin.schema");
 const admin_service_1 = require("./admin.service");
 const admin_controller_1 = require("./admin.controller");
 const auth_module_1 = require("../auth/auth.module");
+const cooperation_types_module_1 = require("../cooperation-types/cooperation-types.module");
+const job_applications_module_1 = require("../job-applications/job-applications.module");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
@@ -21,6 +23,8 @@ exports.AdminModule = AdminModule = __decorate([
         imports: [
             mongoose_1.MongooseModule.forFeature([{ name: admin_schema_1.Admin.name, schema: admin_schema_1.AdminSchema }]),
             auth_module_1.AuthModule,
+            cooperation_types_module_1.CooperationTypesModule,
+            job_applications_module_1.JobApplicationsModule,
         ],
         controllers: [admin_controller_1.AdminController],
         providers: [admin_service_1.AdminService],

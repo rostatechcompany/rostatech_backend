@@ -4,9 +4,16 @@ import { ChangeAdminPasswordDto } from './dto/change-admin-password.dto.ts';
 import { ChangeOwnPasswordDto } from './dto/change-own-password.dto';
 import { AdminRole, AdminStatus } from './schemas/admin.schema';
 import { ChangeRoleDto } from './dto/change-role.dto';
+import { CreateCooperationTypeDto } from '../cooperation-types/dto/create-cooperation-type.dto';
+import { UpdateCooperationTypeDto } from '../cooperation-types/dto/update-cooperation-type.dto';
+import { CooperationTypesService } from '../cooperation-types/cooperation-types.service';
+import { UpdateApplicationDto } from '../job-applications/dto/update-application.dto';
+import { JobApplicationsService } from '../job-applications/job-applications.service';
 export declare class AdminController {
     private readonly adminService;
-    constructor(adminService: AdminService);
+    private readonly cooperationTypesService;
+    private readonly jobApplicationsService;
+    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService);
     findAll(req: any): Promise<{
         createdAtJalali: string;
         username: string;
@@ -100,6 +107,49 @@ export declare class AdminController {
         };
     }>;
     changeUserPassword(id: string, changeAdminPasswordDto: ChangeAdminPasswordDto, req: any): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    create(dto: CreateCooperationTypeDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    findAllCooperationType(): Promise<(import("../cooperation-types/schemas/cooperation-type.schema").CooperationType & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    })[]>;
+    updateCooperationType(id: string, dto: UpdateCooperationTypeDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    removeCooperationType(id: string): Promise<{
+        message: string;
+    }>;
+    findAllJobReq(status?: string): Promise<{
+        _id: any;
+        fullName: any;
+        phoneNumber: any;
+        jobTitle: any;
+        cooperationTypes: any;
+        status: any;
+        createdAtJalali: string;
+    }[]>;
+    findOneJobReq(id: string): Promise<any>;
+    updateJobReq(id: string, updateDto: UpdateApplicationDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+        id: import("mongoose").Types.ObjectId;
+    }>;
+    removeJobReq(id: string): Promise<{
         message: {
             fa: string;
             en: string;

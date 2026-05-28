@@ -23,7 +23,7 @@ class CreateJobApplicationDto {
     skills;
     workExperience;
     portfolio;
-    cooperationType;
+    cooperationTypes;
     jobTitle;
 }
 exports.CreateJobApplicationDto = CreateJobApplicationDto;
@@ -85,14 +85,13 @@ __decorate([
     __metadata("design:type", String)
 ], CreateJobApplicationDto.prototype, "portfolio", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '60d5f484f1a2c8b1f8e4e1a1' }),
-    (0, class_validator_1.IsMongoId)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CreateJobApplicationDto.prototype, "cooperationType", void 0);
+    (0, swagger_1.ApiProperty)({ example: ['60d5f484f1a2c8b1f8e4e1a1', '60d5f484f1a2c8b1f8e4e1a2'], }),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsMongoId)({ each: true }),
+    __metadata("design:type", Array)
+], CreateJobApplicationDto.prototype, "cooperationTypes", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '60d5f484f1a2c8b1f8e4e1a2' }),
-    (0, class_validator_1.IsMongoId)(),
+    (0, swagger_1.ApiProperty)({ example: 'برنامه‌نویس ارشد Frontend' }),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateJobApplicationDto.prototype, "jobTitle", void 0);

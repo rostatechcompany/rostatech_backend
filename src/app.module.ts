@@ -4,9 +4,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JobApplicationsModule } from './job-applications/job-applications.module';
-import { JobPositionsModule } from './job-positions/job-positions.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
+import { CooperationTypesModule } from './cooperation-types/cooperation-types.module';
 
 @Module({
   imports: [
@@ -27,11 +27,11 @@ import { AdminModule } from './admin/admin.module';
     
     JobApplicationsModule,
     
-    JobPositionsModule,
-    
     AuthModule,
     
     AdminModule,
+    
+    CooperationTypesModule,
 
   ],
   controllers: [AppController],

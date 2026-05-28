@@ -4,11 +4,15 @@ import { Admin, AdminSchema } from './schemas/admin.schema';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
 import { AuthModule } from '../auth/auth.module';
+import { CooperationTypesModule} from '../cooperation-types/cooperation-types.module';
+import { JobApplicationsModule} from '../job-applications/job-applications.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Admin.name, schema: AdminSchema }]),
     AuthModule, 
+    CooperationTypesModule,
+    JobApplicationsModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],
