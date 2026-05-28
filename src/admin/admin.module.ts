@@ -6,6 +6,7 @@ import { AdminController } from './admin.controller';
 import { AuthModule } from '../auth/auth.module';
 import { CooperationTypesModule} from '../cooperation-types/cooperation-types.module';
 import { JobApplicationsModule} from '../job-applications/job-applications.module';
+import { ConsultationModule} from '../consultation/consultation.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { JobApplicationsModule} from '../job-applications/job-applications.modul
     AuthModule, 
     CooperationTypesModule,
     JobApplicationsModule,
+    ConsultationModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

@@ -29,14 +29,18 @@ const update_cooperation_type_dto_1 = require("../cooperation-types/dto/update-c
 const cooperation_types_service_1 = require("../cooperation-types/cooperation-types.service");
 const update_application_dto_1 = require("../job-applications/dto/update-application.dto");
 const job_applications_service_1 = require("../job-applications/job-applications.service");
+const update_consultation_dto_1 = require("../consultation/dto/update-consultation.dto");
+const consultation_service_1 = require("../consultation/consultation.service");
 let AdminController = class AdminController {
     adminService;
     cooperationTypesService;
     jobApplicationsService;
-    constructor(adminService, cooperationTypesService, jobApplicationsService) {
+    consultationService;
+    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService) {
         this.adminService = adminService;
         this.cooperationTypesService = cooperationTypesService;
         this.jobApplicationsService = jobApplicationsService;
+        this.consultationService = consultationService;
     }
     findAll(req) {
         return this.adminService.getAllAdmins(req.user);
@@ -94,6 +98,18 @@ let AdminController = class AdminController {
     }
     removeJobReq(id) {
         return this.jobApplicationsService.remove(id);
+    }
+    findAllConsultation(status) {
+        return this.consultationService.findAll(status);
+    }
+    findOneConsultation(id) {
+        return this.consultationService.findOne(id);
+    }
+    updateConsultation(id, dto) {
+        return this.consultationService.update(id, dto);
+    }
+    removeConsultation(id) {
+        return this.consultationService.remove(id);
     }
 };
 exports.AdminController = AdminController;
@@ -310,11 +326,54 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "removeJobReq", null);
+__decorate([
+    (0, common_1.Get)('consultation'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiQuery)({ name: 'status', required: false, enum: ['pending', 'answered', 'closed'] }),
+    __param(0, (0, common_1.Query)('status')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findAllConsultation", null);
+__decorate([
+    (0, common_1.Get)('consultation/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findOneConsultation", null);
+__decorate([
+    (0, common_1.Put)('consultation/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_consultation_dto_1.UpdateConsultationDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updateConsultation", null);
+__decorate([
+    (0, common_1.Delete)('consultation/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "removeConsultation", null);
 exports.AdminController = AdminController = __decorate([
     (0, swagger_1.ApiTags)('Admin Management'),
     (0, common_1.Controller)('admin'),
     __metadata("design:paramtypes", [admin_service_1.AdminService,
         cooperation_types_service_1.CooperationTypesService,
-        job_applications_service_1.JobApplicationsService])
+        job_applications_service_1.JobApplicationsService,
+        consultation_service_1.ConsultationService])
 ], AdminController);
 //# sourceMappingURL=admin.controller.js.map

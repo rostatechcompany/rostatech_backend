@@ -9,11 +9,14 @@ import { UpdateCooperationTypeDto } from '../cooperation-types/dto/update-cooper
 import { CooperationTypesService } from '../cooperation-types/cooperation-types.service';
 import { UpdateApplicationDto } from '../job-applications/dto/update-application.dto';
 import { JobApplicationsService } from '../job-applications/job-applications.service';
+import { UpdateConsultationDto } from '../consultation/dto/update-consultation.dto';
+import { ConsultationService } from '../consultation/consultation.service';
 export declare class AdminController {
     private readonly adminService;
     private readonly cooperationTypesService;
     private readonly jobApplicationsService;
-    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService);
+    private readonly consultationService;
+    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService);
     findAll(req: any): Promise<{
         createdAtJalali: string;
         username: string;
@@ -150,6 +153,28 @@ export declare class AdminController {
         id: import("mongoose").Types.ObjectId;
     }>;
     removeJobReq(id: string): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    findAllConsultation(status?: string): Promise<{
+        _id: any;
+        fullName: any;
+        phoneNumber: any;
+        subject: any;
+        status: any;
+        createdAtJalali: string;
+    }[]>;
+    findOneConsultation(id: string): Promise<any>;
+    updateConsultation(id: string, dto: UpdateConsultationDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+        id: import("mongoose").Types.ObjectId;
+    }>;
+    removeConsultation(id: string): Promise<{
         message: {
             fa: string;
             en: string;

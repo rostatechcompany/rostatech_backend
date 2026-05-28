@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const common_1 = require("@nestjs/common");
+const all_exceptions_filter_1 = require("./common/filters/all-exceptions.filter");
 const transform_interceptor_1 = require("./common/interceptors/transform.interceptor");
 const swagger_1 = require("@nestjs/swagger");
 const helmet_1 = __importDefault(require("helmet"));
@@ -23,6 +24,7 @@ async function bootstrap() {
         transform: true,
         forbidNonWhitelisted: true,
     }));
+    app.useGlobalFilters(new all_exceptions_filter_1.AllExceptionsFilter());
     app.useGlobalInterceptors(new transform_interceptor_1.TransformInterceptor());
     const config = new swagger_1.DocumentBuilder()
         .setTitle('RostaTech Backend API')

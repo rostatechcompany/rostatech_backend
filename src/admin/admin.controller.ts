@@ -25,6 +25,8 @@ import { UpdateCooperationTypeDto } from '../cooperation-types/dto/update-cooper
 import { CooperationTypesService} from '../cooperation-types/cooperation-types.service';
 import { UpdateApplicationDto } from '../job-applications/dto/update-application.dto';
 import { JobApplicationsService} from '../job-applications/job-applications.service';
+import { UpdateConsultationDto } from '../consultation/dto/update-consultation.dto';
+import { ConsultationService } from '../consultation/consultation.service';
 
 @ApiTags('Admin Management')
 @Controller('admin')
@@ -32,6 +34,7 @@ export class AdminController {
   constructor(private readonly adminService: AdminService,
               private readonly cooperationTypesService:CooperationTypesService, 
               private readonly jobApplicationsService: JobApplicationsService,
+              private readonly consultationService: ConsultationService,
   ) {}
 
   @Get()
@@ -229,5 +232,44 @@ export class AdminController {
   @ApiBearerAuth()
   removeJobReq(@Param('id') id: string) {
     return this.jobApplicationsService.remove(id);
+  }
+
+  // for consultation
+  // -----------------------------------------------
+  // list
+  @Get('consultation')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiQuery({ name: 'status', required: false, enum: ['pending', 'answered', 'closed'] })
+  findAllConsultation(@Query('status') status?: string) {
+    return this.consultationService.findAll(status);
+  }
+
+  // detailed
+  @Get('consultation/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  findOneConsultation(@Param('id') id: string) {
+    return this.consultationService.findOne(id);
+  }
+
+  // change status and add note
+  @Put('consultation/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  updateConsultation(@Param('id') id: string, @Body() dto: UpdateConsultationDto) {
+    return this.consultationService.update(id, dto);
+  }
+
+  // delete
+  @Delete('consultation/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  removeConsultation(@Param('id') id: string) {
+    return this.consultationService.remove(id);
   }
 }

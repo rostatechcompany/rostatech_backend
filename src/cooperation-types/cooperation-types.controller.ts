@@ -8,7 +8,7 @@ export class CooperationTypesController {
   constructor(private readonly service: CooperationTypesService) {}
 
   // General: Get active collaboration types for dropdown
-  @Get('public')
+  @Get('')
   getPublic() {
     return this.service.findActive();
   }

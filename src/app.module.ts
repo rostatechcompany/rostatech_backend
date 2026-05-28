@@ -7,6 +7,7 @@ import { JobApplicationsModule } from './job-applications/job-applications.modul
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { CooperationTypesModule } from './cooperation-types/cooperation-types.module';
+import { ConsultationModule } from './consultation/consultation.module';
 
 @Module({
   imports: [
@@ -32,6 +33,8 @@ import { CooperationTypesModule } from './cooperation-types/cooperation-types.mo
     AdminModule,
     
     CooperationTypesModule,
+    
+    ConsultationModule,
 
   ],
   controllers: [AppController],
