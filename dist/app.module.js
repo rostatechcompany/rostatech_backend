@@ -17,6 +17,7 @@ const auth_module_1 = require("./auth/auth.module");
 const admin_module_1 = require("./admin/admin.module");
 const cooperation_types_module_1 = require("./cooperation-types/cooperation-types.module");
 const consultation_module_1 = require("./consultation/consultation.module");
+const site_content_module_1 = require("./site-content/site-content.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -39,6 +40,7 @@ exports.AppModule = AppModule = __decorate([
             admin_module_1.AdminModule,
             cooperation_types_module_1.CooperationTypesModule,
             consultation_module_1.ConsultationModule,
+            site_content_module_1.SiteContentModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

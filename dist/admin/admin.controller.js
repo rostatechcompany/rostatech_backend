@@ -31,16 +31,23 @@ const update_application_dto_1 = require("../job-applications/dto/update-applica
 const job_applications_service_1 = require("../job-applications/job-applications.service");
 const update_consultation_dto_1 = require("../consultation/dto/update-consultation.dto");
 const consultation_service_1 = require("../consultation/consultation.service");
+const site_content_service_1 = require("../site-content/site-content.service");
+const settings_dto_1 = require("../site-content/dto/settings.dto");
+const team_member_dto_1 = require("../site-content/dto/team-member.dto");
+const client_dto_1 = require("../site-content/dto/client.dto");
+const service_dto_1 = require("../site-content/dto/service.dto");
 let AdminController = class AdminController {
     adminService;
     cooperationTypesService;
     jobApplicationsService;
     consultationService;
-    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService) {
+    siteContentService;
+    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService, siteContentService) {
         this.adminService = adminService;
         this.cooperationTypesService = cooperationTypesService;
         this.jobApplicationsService = jobApplicationsService;
         this.consultationService = consultationService;
+        this.siteContentService = siteContentService;
     }
     findAll(req) {
         return this.adminService.getAllAdmins(req.user);
@@ -110,6 +117,48 @@ let AdminController = class AdminController {
     }
     removeConsultation(id) {
         return this.consultationService.remove(id);
+    }
+    getSettings() {
+        return this.siteContentService.getSettings();
+    }
+    updateSettings(dto) {
+        return this.siteContentService.updateSettings(dto);
+    }
+    getTeam() {
+        return this.siteContentService.getTeam();
+    }
+    createTeam(dto) {
+        return this.siteContentService.createTeamMember(dto);
+    }
+    updateTeam(id, dto) {
+        return this.siteContentService.updateTeamMember(id, dto);
+    }
+    deleteTeam(id) {
+        return this.siteContentService.deleteTeamMember(id);
+    }
+    getClients() {
+        return this.siteContentService.getClients();
+    }
+    createClient(dto) {
+        return this.siteContentService.createClient(dto);
+    }
+    updateClient(id, dto) {
+        return this.siteContentService.updateClient(id, dto);
+    }
+    deleteClient(id) {
+        return this.siteContentService.deleteClient(id);
+    }
+    getServices() {
+        return this.siteContentService.getServices();
+    }
+    createService(dto) {
+        return this.siteContentService.createService(dto);
+    }
+    updateService(id, dto) {
+        return this.siteContentService.updateService(id, dto);
+    }
+    deleteService(id) {
+        return this.siteContentService.deleteService(id);
     }
 };
 exports.AdminController = AdminController;
@@ -368,12 +417,138 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "removeConsultation", null);
+__decorate([
+    (0, common_1.Get)('site-content/settings'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "getSettings", null);
+__decorate([
+    (0, common_1.Put)('site-content/settings'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [settings_dto_1.UpdateSettingsDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updateSettings", null);
+__decorate([
+    (0, common_1.Get)('site-content/team'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "getTeam", null);
+__decorate([
+    (0, common_1.Post)('site-content/team'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [team_member_dto_1.CreateTeamMemberDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "createTeam", null);
+__decorate([
+    (0, common_1.Put)('site-content/team/:id'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, team_member_dto_1.UpdateTeamMemberDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updateTeam", null);
+__decorate([
+    (0, common_1.Delete)('site-content/team/:id'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "deleteTeam", null);
+__decorate([
+    (0, common_1.Get)('site-content/clients'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "getClients", null);
+__decorate([
+    (0, common_1.Post)('site-content/clients'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [client_dto_1.CreateClientDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "createClient", null);
+__decorate([
+    (0, common_1.Put)('site-content/clients/:id'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, client_dto_1.UpdateClientDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updateClient", null);
+__decorate([
+    (0, common_1.Delete)('site-content/clients/:id'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "deleteClient", null);
+__decorate([
+    (0, common_1.Get)('site-content/services'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "getServices", null);
+__decorate([
+    (0, common_1.Post)('site-content/services'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [service_dto_1.CreateServiceDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "createService", null);
+__decorate([
+    (0, common_1.Put)('site-content/services/:id'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, service_dto_1.UpdateServiceDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updateService", null);
+__decorate([
+    (0, common_1.Delete)('site-content/services/:id'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "deleteService", null);
 exports.AdminController = AdminController = __decorate([
     (0, swagger_1.ApiTags)('Admin Management'),
     (0, common_1.Controller)('admin'),
     __metadata("design:paramtypes", [admin_service_1.AdminService,
         cooperation_types_service_1.CooperationTypesService,
         job_applications_service_1.JobApplicationsService,
-        consultation_service_1.ConsultationService])
+        consultation_service_1.ConsultationService,
+        site_content_service_1.SiteContentService])
 ], AdminController);
 //# sourceMappingURL=admin.controller.js.map

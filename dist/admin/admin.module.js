@@ -16,6 +16,7 @@ const auth_module_1 = require("../auth/auth.module");
 const cooperation_types_module_1 = require("../cooperation-types/cooperation-types.module");
 const job_applications_module_1 = require("../job-applications/job-applications.module");
 const consultation_module_1 = require("../consultation/consultation.module");
+const site_content_module_1 = require("../site-content/site-content.module");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
@@ -27,6 +28,7 @@ exports.AdminModule = AdminModule = __decorate([
             cooperation_types_module_1.CooperationTypesModule,
             job_applications_module_1.JobApplicationsModule,
             consultation_module_1.ConsultationModule,
+            site_content_module_1.SiteContentModule,
         ],
         controllers: [admin_controller_1.AdminController],
         providers: [admin_service_1.AdminService],

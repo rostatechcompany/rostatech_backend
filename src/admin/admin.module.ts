@@ -7,6 +7,7 @@ import { AuthModule } from '../auth/auth.module';
 import { CooperationTypesModule} from '../cooperation-types/cooperation-types.module';
 import { JobApplicationsModule} from '../job-applications/job-applications.module';
 import { ConsultationModule} from '../consultation/consultation.module';
+import { SiteContentModule} from '../site-content/site-content.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConsultationModule} from '../consultation/consultation.module';
     CooperationTypesModule,
     JobApplicationsModule,
     ConsultationModule,
+    SiteContentModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

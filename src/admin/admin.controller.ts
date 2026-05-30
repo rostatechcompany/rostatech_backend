@@ -27,6 +27,11 @@ import { UpdateApplicationDto } from '../job-applications/dto/update-application
 import { JobApplicationsService} from '../job-applications/job-applications.service';
 import { UpdateConsultationDto } from '../consultation/dto/update-consultation.dto';
 import { ConsultationService } from '../consultation/consultation.service';
+import { SiteContentService} from '../site-content/site-content.service';
+import { UpdateSettingsDto } from '../site-content/dto/settings.dto';
+import { CreateTeamMemberDto, UpdateTeamMemberDto } from '../site-content/dto/team-member.dto';
+import { CreateClientDto, UpdateClientDto } from '../site-content/dto/client.dto';
+import { CreateServiceDto, UpdateServiceDto } from '../site-content/dto/service.dto';
 
 @ApiTags('Admin Management')
 @Controller('admin')
@@ -35,6 +40,7 @@ export class AdminController {
               private readonly cooperationTypesService:CooperationTypesService, 
               private readonly jobApplicationsService: JobApplicationsService,
               private readonly consultationService: ConsultationService,
+              private readonly siteContentService: SiteContentService
   ) {}
 
   @Get()
@@ -271,5 +277,110 @@ export class AdminController {
   @ApiBearerAuth()
   removeConsultation(@Param('id') id: string) {
     return this.consultationService.remove(id);
+  }
+
+  // for site content
+  // =================================================
+
+  // Settings
+  @Get('site-content/settings')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  getSettings() {
+    return this.siteContentService.getSettings();
+  }
+
+  @Put('site-content/settings')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  updateSettings(@Body() dto: UpdateSettingsDto) {
+    return this.siteContentService.updateSettings(dto);
+  }
+
+  // Team
+  @Get('site-content/team')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  getTeam() {
+    return this.siteContentService.getTeam();
+  }
+
+  @Post('site-content/team')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  createTeam(@Body() dto: CreateTeamMemberDto) {
+    return this.siteContentService.createTeamMember(dto);
+  }
+
+  @Put('site-content/team/:id')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  updateTeam(@Param('id') id: string, @Body() dto: UpdateTeamMemberDto) {
+    return this.siteContentService.updateTeamMember(id, dto);
+  }
+
+  @Delete('site-content/team/:id')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  deleteTeam(@Param('id') id: string) {
+    return this.siteContentService.deleteTeamMember(id);
+  }
+
+  // Clients
+  @Get('site-content/clients')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  getClients() {
+    return this.siteContentService.getClients();
+  }
+
+  @Post('site-content/clients')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  createClient(@Body() dto: CreateClientDto) {
+    return this.siteContentService.createClient(dto);
+  }
+
+  @Put('site-content/clients/:id')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  updateClient(@Param('id') id: string, @Body() dto: UpdateClientDto) {
+    return this.siteContentService.updateClient(id, dto);
+  }
+
+  @Delete('site-content/clients/:id')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  deleteClient(@Param('id') id: string) {
+    return this.siteContentService.deleteClient(id);
+  }
+
+  // Services
+  @Get('site-content/services')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  getServices() {
+    return this.siteContentService.getServices();
+  }
+
+  @Post('site-content/services')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  createService(@Body() dto: CreateServiceDto) {
+    return this.siteContentService.createService(dto);
+  }
+
+  @Put('site-content/services/:id')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  updateService(@Param('id') id: string, @Body() dto: UpdateServiceDto) {
+    return this.siteContentService.updateService(id, dto);
+  }
+
+  @Delete('site-content/services/:id')
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  deleteService(@Param('id') id: string) {
+    return this.siteContentService.deleteService(id);
   }
 }

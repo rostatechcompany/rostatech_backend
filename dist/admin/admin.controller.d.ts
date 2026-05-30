@@ -11,12 +11,18 @@ import { UpdateApplicationDto } from '../job-applications/dto/update-application
 import { JobApplicationsService } from '../job-applications/job-applications.service';
 import { UpdateConsultationDto } from '../consultation/dto/update-consultation.dto';
 import { ConsultationService } from '../consultation/consultation.service';
+import { SiteContentService } from '../site-content/site-content.service';
+import { UpdateSettingsDto } from '../site-content/dto/settings.dto';
+import { CreateTeamMemberDto, UpdateTeamMemberDto } from '../site-content/dto/team-member.dto';
+import { CreateClientDto, UpdateClientDto } from '../site-content/dto/client.dto';
+import { CreateServiceDto, UpdateServiceDto } from '../site-content/dto/service.dto';
 export declare class AdminController {
     private readonly adminService;
     private readonly cooperationTypesService;
     private readonly jobApplicationsService;
     private readonly consultationService;
-    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService);
+    private readonly siteContentService;
+    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService, siteContentService: SiteContentService);
     findAll(req: any): Promise<{
         createdAtJalali: string;
         username: string;
@@ -175,6 +181,86 @@ export declare class AdminController {
         id: import("mongoose").Types.ObjectId;
     }>;
     removeConsultation(id: string): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    getSettings(): Promise<import("../site-content/schemas/settings.schema").Settings & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    }>;
+    updateSettings(dto: UpdateSettingsDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    getTeam(): Promise<(import("../site-content/schemas/team-member.schema").TeamMember & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    })[]>;
+    createTeam(dto: CreateTeamMemberDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    updateTeam(id: string, dto: UpdateTeamMemberDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    deleteTeam(id: string): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    getClients(): Promise<(import("../site-content/schemas/client.schema").Client & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    })[]>;
+    createClient(dto: CreateClientDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    updateClient(id: string, dto: UpdateClientDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    deleteClient(id: string): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    getServices(): Promise<(import("../site-content/schemas/service.schema").Service & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    })[]>;
+    createService(dto: CreateServiceDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    updateService(id: string, dto: UpdateServiceDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    deleteService(id: string): Promise<{
         message: {
             fa: string;
             en: string;

@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
 import { CooperationTypesModule } from './cooperation-types/cooperation-types.module';
 import { ConsultationModule } from './consultation/consultation.module';
+import { SiteContentModule } from './site-content/site-content.module';
 
 @Module({
   imports: [
@@ -35,6 +36,8 @@ import { ConsultationModule } from './consultation/consultation.module';
     CooperationTypesModule,
     
     ConsultationModule,
+    
+    SiteContentModule,
 
   ],
   controllers: [AppController],
