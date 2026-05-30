@@ -36,18 +36,21 @@ const settings_dto_1 = require("../site-content/dto/settings.dto");
 const team_member_dto_1 = require("../site-content/dto/team-member.dto");
 const client_dto_1 = require("../site-content/dto/client.dto");
 const service_dto_1 = require("../site-content/dto/service.dto");
+const newsletter_service_1 = require("../newsletter/newsletter.service");
 let AdminController = class AdminController {
     adminService;
     cooperationTypesService;
     jobApplicationsService;
     consultationService;
     siteContentService;
-    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService, siteContentService) {
+    newsletterService;
+    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService, siteContentService, newsletterService) {
         this.adminService = adminService;
         this.cooperationTypesService = cooperationTypesService;
         this.jobApplicationsService = jobApplicationsService;
         this.consultationService = consultationService;
         this.siteContentService = siteContentService;
+        this.newsletterService = newsletterService;
     }
     findAll(req) {
         return this.adminService.getAllAdmins(req.user);
@@ -159,6 +162,14 @@ let AdminController = class AdminController {
     }
     deleteService(id) {
         return this.siteContentService.deleteService(id);
+    }
+    findAllNewsletter(page, limit) {
+        const p = page ? parseInt(page, 10) : 1;
+        const l = limit ? parseInt(limit, 10) : 10;
+        return this.newsletterService.findAll(p, l);
+    }
+    removeNewsletter(id) {
+        return this.newsletterService.remove(id);
     }
 };
 exports.AdminController = AdminController;
@@ -542,6 +553,29 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "deleteService", null);
+__decorate([
+    (0, common_1.Get)('newsletter'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false, type: Number, example: 1 }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false, type: Number, example: 10 }),
+    __param(0, (0, common_1.Query)('page')),
+    __param(1, (0, common_1.Query)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findAllNewsletter", null);
+__decorate([
+    (0, common_1.Delete)('newsletter/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "removeNewsletter", null);
 exports.AdminController = AdminController = __decorate([
     (0, swagger_1.ApiTags)('Admin Management'),
     (0, common_1.Controller)('admin'),
@@ -549,6 +583,7 @@ exports.AdminController = AdminController = __decorate([
         cooperation_types_service_1.CooperationTypesService,
         job_applications_service_1.JobApplicationsService,
         consultation_service_1.ConsultationService,
-        site_content_service_1.SiteContentService])
+        site_content_service_1.SiteContentService,
+        newsletter_service_1.NewsletterService])
 ], AdminController);
 //# sourceMappingURL=admin.controller.js.map

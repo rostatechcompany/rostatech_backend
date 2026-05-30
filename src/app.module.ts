@@ -9,6 +9,7 @@ import { AdminModule } from './admin/admin.module';
 import { CooperationTypesModule } from './cooperation-types/cooperation-types.module';
 import { ConsultationModule } from './consultation/consultation.module';
 import { SiteContentModule } from './site-content/site-content.module';
+import { NewsletterModule } from './newsletter/newsletter.module';
 
 @Module({
   imports: [
@@ -38,6 +39,8 @@ import { SiteContentModule } from './site-content/site-content.module';
     ConsultationModule,
     
     SiteContentModule,
+    
+    NewsletterModule,
 
   ],
   controllers: [AppController],

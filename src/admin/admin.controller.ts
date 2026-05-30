@@ -32,6 +32,7 @@ import { UpdateSettingsDto } from '../site-content/dto/settings.dto';
 import { CreateTeamMemberDto, UpdateTeamMemberDto } from '../site-content/dto/team-member.dto';
 import { CreateClientDto, UpdateClientDto } from '../site-content/dto/client.dto';
 import { CreateServiceDto, UpdateServiceDto } from '../site-content/dto/service.dto';
+import { NewsletterService} from '../newsletter/newsletter.service';
 
 @ApiTags('Admin Management')
 @Controller('admin')
@@ -40,7 +41,8 @@ export class AdminController {
               private readonly cooperationTypesService:CooperationTypesService, 
               private readonly jobApplicationsService: JobApplicationsService,
               private readonly consultationService: ConsultationService,
-              private readonly siteContentService: SiteContentService
+              private readonly siteContentService: SiteContentService,
+              private readonly newsletterService: NewsletterService,
   ) {}
 
   @Get()
@@ -382,5 +384,29 @@ export class AdminController {
   @ApiBearerAuth()
   deleteService(@Param('id') id: string) {
     return this.siteContentService.deleteService(id);
+  }
+
+  // for newsletter
+  // ============================
+  // list
+  @Get('newsletter')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  findAllNewsletter(@Query('page') page?: string, @Query('limit') limit?: string) {
+    const p = page ? parseInt(page, 10) : 1;
+    const l = limit ? parseInt(limit, 10) : 10;
+    return this.newsletterService.findAll(p, l);
+  }
+
+  // delete
+  @Delete('newsletter/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  removeNewsletter(@Param('id') id: string) {
+    return this.newsletterService.remove(id);
   }
 }

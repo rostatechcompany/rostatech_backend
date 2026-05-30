@@ -16,13 +16,15 @@ import { UpdateSettingsDto } from '../site-content/dto/settings.dto';
 import { CreateTeamMemberDto, UpdateTeamMemberDto } from '../site-content/dto/team-member.dto';
 import { CreateClientDto, UpdateClientDto } from '../site-content/dto/client.dto';
 import { CreateServiceDto, UpdateServiceDto } from '../site-content/dto/service.dto';
+import { NewsletterService } from '../newsletter/newsletter.service';
 export declare class AdminController {
     private readonly adminService;
     private readonly cooperationTypesService;
     private readonly jobApplicationsService;
     private readonly consultationService;
     private readonly siteContentService;
-    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService, siteContentService: SiteContentService);
+    private readonly newsletterService;
+    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService, siteContentService: SiteContentService, newsletterService: NewsletterService);
     findAll(req: any): Promise<{
         createdAtJalali: string;
         username: string;
@@ -261,6 +263,25 @@ export declare class AdminController {
         };
     }>;
     deleteService(id: string): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    findAllNewsletter(page?: string, limit?: string): Promise<{
+        data: {
+            _id: any;
+            phoneNumber: any;
+            createdAtJalali: string;
+        }[];
+        meta: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPages: number;
+        };
+    }>;
+    removeNewsletter(id: string): Promise<{
         message: {
             fa: string;
             en: string;

@@ -8,6 +8,7 @@ import { CooperationTypesModule} from '../cooperation-types/cooperation-types.mo
 import { JobApplicationsModule} from '../job-applications/job-applications.module';
 import { ConsultationModule} from '../consultation/consultation.module';
 import { SiteContentModule} from '../site-content/site-content.module';
+import { NewsletterModule}from '../newsletter/newsletter.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { SiteContentModule} from '../site-content/site-content.module';
     JobApplicationsModule,
     ConsultationModule,
     SiteContentModule,
+    NewsletterModule
   ],
   controllers: [AdminController],
   providers: [AdminService],
