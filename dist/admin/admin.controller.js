@@ -37,6 +37,9 @@ const team_member_dto_1 = require("../site-content/dto/team-member.dto");
 const client_dto_1 = require("../site-content/dto/client.dto");
 const service_dto_1 = require("../site-content/dto/service.dto");
 const newsletter_service_1 = require("../newsletter/newsletter.service");
+const portfolio_service_1 = require("../portfolio/portfolio.service");
+const create_portfolio_dto_1 = require("../portfolio/dto/create-portfolio.dto");
+const update_portfolio_dto_1 = require("../portfolio/dto/update-portfolio.dto");
 let AdminController = class AdminController {
     adminService;
     cooperationTypesService;
@@ -44,13 +47,15 @@ let AdminController = class AdminController {
     consultationService;
     siteContentService;
     newsletterService;
-    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService, siteContentService, newsletterService) {
+    portfolioService;
+    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService, siteContentService, newsletterService, portfolioService) {
         this.adminService = adminService;
         this.cooperationTypesService = cooperationTypesService;
         this.jobApplicationsService = jobApplicationsService;
         this.consultationService = consultationService;
         this.siteContentService = siteContentService;
         this.newsletterService = newsletterService;
+        this.portfolioService = portfolioService;
     }
     findAll(req) {
         return this.adminService.getAllAdmins(req.user);
@@ -170,6 +175,21 @@ let AdminController = class AdminController {
     }
     removeNewsletter(id) {
         return this.newsletterService.remove(id);
+    }
+    createPortfolio(dto) {
+        return this.portfolioService.create(dto);
+    }
+    findAllPortfolio() {
+        return this.portfolioService.findAllAdmin();
+    }
+    findOnePortfolio(id) {
+        return this.portfolioService.findOneAdmin(id);
+    }
+    updatePortfolio(id, dto) {
+        return this.portfolioService.update(id, dto);
+    }
+    removePortfolio(id) {
+        return this.portfolioService.remove(id);
     }
 };
 exports.AdminController = AdminController;
@@ -576,6 +596,56 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "removeNewsletter", null);
+__decorate([
+    (0, common_1.Post)('portfolio'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_portfolio_dto_1.CreatePortfolioDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "createPortfolio", null);
+__decorate([
+    (0, common_1.Get)('portfolio'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findAllPortfolio", null);
+__decorate([
+    (0, common_1.Get)('portfolio/:id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findOnePortfolio", null);
+__decorate([
+    (0, common_1.Put)('portfolio/:id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_portfolio_dto_1.UpdatePortfolioDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updatePortfolio", null);
+__decorate([
+    (0, common_1.Delete)('portfolio/:id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "removePortfolio", null);
 exports.AdminController = AdminController = __decorate([
     (0, swagger_1.ApiTags)('Admin Management'),
     (0, common_1.Controller)('admin'),
@@ -584,6 +654,7 @@ exports.AdminController = AdminController = __decorate([
         job_applications_service_1.JobApplicationsService,
         consultation_service_1.ConsultationService,
         site_content_service_1.SiteContentService,
-        newsletter_service_1.NewsletterService])
+        newsletter_service_1.NewsletterService,
+        portfolio_service_1.PortfolioService])
 ], AdminController);
 //# sourceMappingURL=admin.controller.js.map

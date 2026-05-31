@@ -9,6 +9,7 @@ import { JobApplicationsModule} from '../job-applications/job-applications.modul
 import { ConsultationModule} from '../consultation/consultation.module';
 import { SiteContentModule} from '../site-content/site-content.module';
 import { NewsletterModule}from '../newsletter/newsletter.module';
+import { PortfolioModule}from '../portfolio/portfolio.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { NewsletterModule}from '../newsletter/newsletter.module';
     JobApplicationsModule,
     ConsultationModule,
     SiteContentModule,
-    NewsletterModule
+    NewsletterModule,
+    PortfolioModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

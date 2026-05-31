@@ -19,6 +19,7 @@ const cooperation_types_module_1 = require("./cooperation-types/cooperation-type
 const consultation_module_1 = require("./consultation/consultation.module");
 const site_content_module_1 = require("./site-content/site-content.module");
 const newsletter_module_1 = require("./newsletter/newsletter.module");
+const portfolio_module_1 = require("./portfolio/portfolio.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -43,6 +44,7 @@ exports.AppModule = AppModule = __decorate([
             consultation_module_1.ConsultationModule,
             site_content_module_1.SiteContentModule,
             newsletter_module_1.NewsletterModule,
+            portfolio_module_1.PortfolioModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

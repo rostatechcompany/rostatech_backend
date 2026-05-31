@@ -10,6 +10,7 @@ import { CooperationTypesModule } from './cooperation-types/cooperation-types.mo
 import { ConsultationModule } from './consultation/consultation.module';
 import { SiteContentModule } from './site-content/site-content.module';
 import { NewsletterModule } from './newsletter/newsletter.module';
+import { PortfolioModule } from './portfolio/portfolio.module';
 
 @Module({
   imports: [
@@ -41,6 +42,8 @@ import { NewsletterModule } from './newsletter/newsletter.module';
     SiteContentModule,
     
     NewsletterModule,
+    
+    PortfolioModule,
 
   ],
   controllers: [AppController],

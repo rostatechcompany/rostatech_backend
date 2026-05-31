@@ -17,6 +17,9 @@ import { CreateTeamMemberDto, UpdateTeamMemberDto } from '../site-content/dto/te
 import { CreateClientDto, UpdateClientDto } from '../site-content/dto/client.dto';
 import { CreateServiceDto, UpdateServiceDto } from '../site-content/dto/service.dto';
 import { NewsletterService } from '../newsletter/newsletter.service';
+import { PortfolioService } from '../portfolio/portfolio.service';
+import { CreatePortfolioDto } from '../portfolio/dto/create-portfolio.dto';
+import { UpdatePortfolioDto } from '../portfolio/dto/update-portfolio.dto';
 export declare class AdminController {
     private readonly adminService;
     private readonly cooperationTypesService;
@@ -24,7 +27,8 @@ export declare class AdminController {
     private readonly consultationService;
     private readonly siteContentService;
     private readonly newsletterService;
-    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService, siteContentService: SiteContentService, newsletterService: NewsletterService);
+    private readonly portfolioService;
+    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService, siteContentService: SiteContentService, newsletterService: NewsletterService, portfolioService: PortfolioService);
     findAll(req: any): Promise<{
         createdAtJalali: string;
         username: string;
@@ -282,6 +286,27 @@ export declare class AdminController {
         };
     }>;
     removeNewsletter(id: string): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    createPortfolio(dto: CreatePortfolioDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+        id: import("mongoose").Types.ObjectId;
+    }>;
+    findAllPortfolio(): Promise<any[]>;
+    findOnePortfolio(id: string): Promise<any>;
+    updatePortfolio(id: string, dto: UpdatePortfolioDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    removePortfolio(id: string): Promise<{
         message: {
             fa: string;
             en: string;

@@ -33,6 +33,9 @@ import { CreateTeamMemberDto, UpdateTeamMemberDto } from '../site-content/dto/te
 import { CreateClientDto, UpdateClientDto } from '../site-content/dto/client.dto';
 import { CreateServiceDto, UpdateServiceDto } from '../site-content/dto/service.dto';
 import { NewsletterService} from '../newsletter/newsletter.service';
+import { PortfolioService} from '../portfolio/portfolio.service';
+import { CreatePortfolioDto } from '../portfolio/dto/create-portfolio.dto';
+import { UpdatePortfolioDto } from '../portfolio/dto/update-portfolio.dto';
 
 @ApiTags('Admin Management')
 @Controller('admin')
@@ -43,6 +46,7 @@ export class AdminController {
               private readonly consultationService: ConsultationService,
               private readonly siteContentService: SiteContentService,
               private readonly newsletterService: NewsletterService,
+              private readonly portfolioService: PortfolioService,
   ) {}
 
   @Get()
@@ -408,5 +412,48 @@ export class AdminController {
   @ApiBearerAuth()
   removeNewsletter(@Param('id') id: string) {
     return this.newsletterService.remove(id);
+  }
+
+  // for portfolio
+  // ======================================
+  
+  @Post('portfolio')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  createPortfolio(@Body() dto: CreatePortfolioDto) {
+    return this.portfolioService.create(dto);
+  }
+
+  @Get('portfolio')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  findAllPortfolio() {
+    return this.portfolioService.findAllAdmin();
+  }
+
+  @Get('portfolio/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  findOnePortfolio(@Param('id') id: string) {
+    return this.portfolioService.findOneAdmin(id);
+  }
+
+  @Put('portfolio/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  updatePortfolio(@Param('id') id: string, @Body() dto: UpdatePortfolioDto) {
+    return this.portfolioService.update(id, dto);
+  }
+
+  @Delete('portfolio/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  removePortfolio(@Param('id') id: string) {
+    return this.portfolioService.remove(id);
   }
 }

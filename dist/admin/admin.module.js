@@ -18,6 +18,7 @@ const job_applications_module_1 = require("../job-applications/job-applications.
 const consultation_module_1 = require("../consultation/consultation.module");
 const site_content_module_1 = require("../site-content/site-content.module");
 const newsletter_module_1 = require("../newsletter/newsletter.module");
+const portfolio_module_1 = require("../portfolio/portfolio.module");
 let AdminModule = class AdminModule {
 };
 exports.AdminModule = AdminModule;
@@ -30,7 +31,8 @@ exports.AdminModule = AdminModule = __decorate([
             job_applications_module_1.JobApplicationsModule,
             consultation_module_1.ConsultationModule,
             site_content_module_1.SiteContentModule,
-            newsletter_module_1.NewsletterModule
+            newsletter_module_1.NewsletterModule,
+            portfolio_module_1.PortfolioModule,
         ],
         controllers: [admin_controller_1.AdminController],
         providers: [admin_service_1.AdminService],
