@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type ClientDocument = Client & Document;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, collection: 'rostatech_clients' })
 export class Client {
   @Prop({ required: true })
   logoUrl!: string;

@@ -72,7 +72,7 @@ __decorate([
     __metadata("design:type", String)
 ], Admin.prototype, "currentJti", void 0);
 exports.Admin = Admin = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_admins' })
 ], Admin);
 exports.AdminSchema = mongoose_1.SchemaFactory.createForClass(Admin);
 //# sourceMappingURL=admin.schema.js.map

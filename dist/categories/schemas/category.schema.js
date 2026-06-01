@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Category.prototype, "isActive", void 0);
 exports.Category = Category = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_categories' })
 ], Category);
 exports.CategorySchema = mongoose_1.SchemaFactory.createForClass(Category);
 //# sourceMappingURL=category.schema.js.map

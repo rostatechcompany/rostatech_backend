@@ -50,7 +50,7 @@ __decorate([
     __metadata("design:type", String)
 ], Consultation.prototype, "adminNotes", void 0);
 exports.Consultation = Consultation = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_consultations' })
 ], Consultation);
 exports.ConsultationSchema = mongoose_1.SchemaFactory.createForClass(Consultation);
 //# sourceMappingURL=consultation.schema.js.map

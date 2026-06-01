@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], CooperationType.prototype, "isActive", void 0);
 exports.CooperationType = CooperationType = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_cooperationtypes' })
 ], CooperationType);
 exports.CooperationTypeSchema = mongoose_1.SchemaFactory.createForClass(CooperationType);
 //# sourceMappingURL=cooperation-type.schema.js.map

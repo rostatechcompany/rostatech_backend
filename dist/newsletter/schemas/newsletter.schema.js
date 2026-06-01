@@ -20,7 +20,7 @@ __decorate([
     __metadata("design:type", String)
 ], Newsletter.prototype, "phoneNumber", void 0);
 exports.Newsletter = Newsletter = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_newlatters' })
 ], Newsletter);
 exports.NewsletterSchema = mongoose_1.SchemaFactory.createForClass(Newsletter);
 //# sourceMappingURL=newsletter.schema.js.map

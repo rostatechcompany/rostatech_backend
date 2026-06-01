@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", String)
 ], SocialLink.prototype, "url", void 0);
 exports.SocialLink = SocialLink = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_sociallinks' })
 ], SocialLink);
 let Settings = class Settings {
     address;
@@ -66,7 +66,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Settings.prototype, "partnerCompaniesCount", void 0);
 exports.Settings = Settings = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_settings' })
 ], Settings);
 exports.SettingsSchema = mongoose_1.SchemaFactory.createForClass(Settings);
 //# sourceMappingURL=settings.schema.js.map

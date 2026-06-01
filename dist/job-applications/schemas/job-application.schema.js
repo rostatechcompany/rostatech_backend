@@ -88,7 +88,7 @@ __decorate([
     __metadata("design:type", String)
 ], JobApplication.prototype, "adminNotes", void 0);
 exports.JobApplication = JobApplication = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_jobapplications' })
 ], JobApplication);
 exports.JobApplicationSchema = mongoose_1.SchemaFactory.createForClass(JobApplication);
 //# sourceMappingURL=job-application.schema.js.map

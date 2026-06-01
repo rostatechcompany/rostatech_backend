@@ -72,7 +72,7 @@ __decorate([
     __metadata("design:type", String)
 ], Portfolio.prototype, "websiteUrl", void 0);
 exports.Portfolio = Portfolio = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_portfolios' })
 ], Portfolio);
 exports.PortfolioSchema = mongoose_1.SchemaFactory.createForClass(Portfolio);
 //# sourceMappingURL=portfolio.schema.js.map

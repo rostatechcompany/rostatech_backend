@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type ServiceDocument = Service & Document;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, collection: 'rostatech_services' })
 export class Service {
   @Prop({ required: true })
   title!: string;

@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type ConsultationDocument = Consultation & Document;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, collection: 'rostatech_consultations' })
 export class Consultation {
   @Prop({ required: true })
   fullName!: string;

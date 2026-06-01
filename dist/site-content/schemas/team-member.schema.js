@@ -30,7 +30,7 @@ __decorate([
     __metadata("design:type", String)
 ], TeamMember.prototype, "position", void 0);
 exports.TeamMember = TeamMember = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_teammember' })
 ], TeamMember);
 exports.TeamMemberSchema = mongoose_1.SchemaFactory.createForClass(TeamMember);
 //# sourceMappingURL=team-member.schema.js.map

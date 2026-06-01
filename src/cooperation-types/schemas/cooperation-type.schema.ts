@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type CooperationTypeDocument = CooperationType & Document;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, collection: 'rostatech_cooperationtypes' })
 export class CooperationType {
   @Prop({ required: true, unique: true })
   title!: string;

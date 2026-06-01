@@ -56,7 +56,7 @@ __decorate([
     __metadata("design:type", String)
 ], Article.prototype, "author", void 0);
 exports.Article = Article = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_articles' })
 ], Article);
 exports.ArticleSchema = mongoose_1.SchemaFactory.createForClass(Article);
 //# sourceMappingURL=article.schema.js.map

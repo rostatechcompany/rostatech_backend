@@ -36,7 +36,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], AboutPage.prototype, "isActive", void 0);
 exports.AboutPage = AboutPage = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_aboutpages' })
 ], AboutPage);
 exports.AboutPageSchema = mongoose_1.SchemaFactory.createForClass(AboutPage);
 //# sourceMappingURL=about-page.schema.js.map

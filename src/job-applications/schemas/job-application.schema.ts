@@ -3,7 +3,7 @@ import { Document, Schema as MongooseSchema } from 'mongoose';
 
 export type JobApplicationDocument = JobApplication & Document;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, collection: 'rostatech_jobapplications' })
 export class JobApplication {
   // Personal Information
   @Prop({ required: true })

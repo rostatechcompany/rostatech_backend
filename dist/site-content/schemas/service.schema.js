@@ -30,7 +30,7 @@ __decorate([
     __metadata("design:type", String)
 ], Service.prototype, "imageUrl", void 0);
 exports.Service = Service = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_services' })
 ], Service);
 exports.ServiceSchema = mongoose_1.SchemaFactory.createForClass(Service);
 //# sourceMappingURL=service.schema.js.map

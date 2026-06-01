@@ -35,7 +35,7 @@ __decorate([
     __metadata("design:type", String)
 ], Client.prototype, "websiteUrl", void 0);
 exports.Client = Client = __decorate([
-    (0, mongoose_1.Schema)({ timestamps: true })
+    (0, mongoose_1.Schema)({ timestamps: true, collection: 'rostatech_clients' })
 ], Client);
 exports.ClientSchema = mongoose_1.SchemaFactory.createForClass(Client);
 //# sourceMappingURL=client.schema.js.map
