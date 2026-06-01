@@ -21,17 +21,20 @@ const team_member_schema_1 = require("./schemas/team-member.schema");
 const client_schema_1 = require("./schemas/client.schema");
 const service_schema_1 = require("./schemas/service.schema");
 const upload_service_1 = require("../upload/upload.service");
+const about_page_schema_1 = require("./schemas/about-page.schema");
 let SiteContentService = class SiteContentService {
     settingsModel;
     teamModel;
     clientModel;
     serviceModel;
+    aboutPageModel;
     uploadService;
-    constructor(settingsModel, teamModel, clientModel, serviceModel, uploadService) {
+    constructor(settingsModel, teamModel, clientModel, serviceModel, aboutPageModel, uploadService) {
         this.settingsModel = settingsModel;
         this.teamModel = teamModel;
         this.clientModel = clientModel;
         this.serviceModel = serviceModel;
+        this.aboutPageModel = aboutPageModel;
         this.uploadService = uploadService;
         this.initSettings();
     }
@@ -48,56 +51,15 @@ let SiteContentService = class SiteContentService {
             .lean();
         if (!settings)
             throw new common_1.NotFoundException('تنظیمات یافت نشد');
-        if (settings.textSections && settings.textSections.length > 0) {
-            settings.textSections = settings.textSections.map((section) => {
-                const { createdAt, updatedAt, ...rest } = section;
-                return rest;
-            });
-        }
         return settings;
     }
     async updateSettings(dto) {
-        const current = await this.settingsModel.findOne();
-        if (!current) {
-            const created = await this.settingsModel.create(dto);
-            return { message: { fa: 'تنظیمات ایجاد شد', en: 'Settings created successfully' } };
-        }
-        if (dto.textSections !== undefined) {
-            const oldSections = current.textSections ?? [];
-            const newSectionsMap = new Map(dto.textSections.map(s => [s.key, s]));
-            for (const oldSection of oldSections) {
-                const oldImage = oldSection.image;
-                if (!oldImage)
-                    continue;
-                const newSection = newSectionsMap.get(oldSection.key);
-                if (!newSection) {
-                    try {
-                        await this.uploadService.deleteImage(oldImage);
-                    }
-                    catch (e) {
-                        console.error('خطا در حذف تصویر حذف‌شده:', e);
-                    }
-                }
-                else if (newSection.image !== oldImage) {
-                    try {
-                        await this.uploadService.deleteImage(oldImage);
-                    }
-                    catch (e) {
-                        console.error('خطا در حذف تصویر قدیمی:', e);
-                    }
-                }
-            }
-        }
         await this.settingsModel.findOneAndUpdate({}, dto, {
             new: true,
             upsert: true,
         }).select('-__v -createdAt -updatedAt');
-        return {
-            message: {
-                fa: 'تنظیمات با موفقیت تغییر یافت',
-                en: 'Settings changed successfully',
-            },
-        };
+        return { message: { fa: 'تنظیمات با موفقیت تغییر یافت',
+                en: 'Settings changed successfully' } };
     }
     async getTeam() {
         return this.teamModel.find().select('-__v -createdAt -updatedAt').lean();
@@ -252,6 +214,38 @@ let SiteContentService = class SiteContentService {
             },
         };
     }
+    async upsertAboutPage(dto) {
+        const existing = await this.aboutPageModel.findOne();
+        if (dto.coverImageUrl !== undefined && existing?.coverImageUrl && existing.coverImageUrl !== dto.coverImageUrl) {
+            try {
+                await this.uploadService.deleteImage(existing.coverImageUrl);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
+        const page = await this.aboutPageModel.findOneAndUpdate({}, { $set: dto }, { new: true, upsert: true }).select('-__v -createdAt -updatedAt');
+        return { message: { fa: 'صفحه درباره ما بروزرسانی شد', en: 'About page updated' }, page };
+    }
+    async deleteAboutPage() {
+        const page = await this.aboutPageModel.findOne();
+        if (page?.coverImageUrl) {
+            try {
+                await this.uploadService.deleteImage(page.coverImageUrl);
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
+        await this.aboutPageModel.deleteMany();
+        return { message: { fa: 'صفحه درباره ما حذف شد', en: 'About page deleted' } };
+    }
+    async getAboutPagePublic() {
+        const page = await this.aboutPageModel.findOne({ isActive: true }).select('-__v -createdAt -updatedAt').lean();
+        if (!page)
+            throw new common_1.NotFoundException('صفحه درباره ما یافت نشد');
+        return page;
+    }
 };
 exports.SiteContentService = SiteContentService;
 exports.SiteContentService = SiteContentService = __decorate([
@@ -260,7 +254,9 @@ exports.SiteContentService = SiteContentService = __decorate([
     __param(1, (0, mongoose_1.InjectModel)(team_member_schema_1.TeamMember.name)),
     __param(2, (0, mongoose_1.InjectModel)(client_schema_1.Client.name)),
     __param(3, (0, mongoose_1.InjectModel)(service_schema_1.Service.name)),
+    __param(4, (0, mongoose_1.InjectModel)(about_page_schema_1.AboutPage.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,

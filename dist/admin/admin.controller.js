@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
-const platform_express_1 = require("@nestjs/platform-express");
 const admin_service_1 = require("./admin.service");
 const update_admin_dto_1 = require("./dto/update-admin.dto");
 const change_admin_password_dto_ts_1 = require("./dto/change-admin-password.dto.ts");
@@ -41,14 +40,13 @@ const newsletter_service_1 = require("../newsletter/newsletter.service");
 const portfolio_service_1 = require("../portfolio/portfolio.service");
 const create_portfolio_dto_1 = require("../portfolio/dto/create-portfolio.dto");
 const update_portfolio_dto_1 = require("../portfolio/dto/update-portfolio.dto");
-const upload_service_1 = require("../upload/upload.service");
-const upload_dto_1 = require("../upload/dto/upload.dto");
 const categories_service_1 = require("../categories/categories.service");
 const create_category_dto_1 = require("../categories/dto/create-category.dto");
 const update_category_dto_1 = require("../categories/dto/update-category.dto");
 const article_service_1 = require("../article/article.service");
 const create_article_dto_1 = require("../article/dto/create-article.dto");
 const update_article_dto_1 = require("../article/dto/update-article.dto");
+const about_page_dto_1 = require("../site-content/dto/about-page.dto");
 let AdminController = class AdminController {
     adminService;
     cooperationTypesService;
@@ -57,10 +55,9 @@ let AdminController = class AdminController {
     siteContentService;
     newsletterService;
     portfolioService;
-    uploadService;
     categoriesService;
     articleService;
-    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService, siteContentService, newsletterService, portfolioService, uploadService, categoriesService, articleService) {
+    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService, siteContentService, newsletterService, portfolioService, categoriesService, articleService) {
         this.adminService = adminService;
         this.cooperationTypesService = cooperationTypesService;
         this.jobApplicationsService = jobApplicationsService;
@@ -68,7 +65,6 @@ let AdminController = class AdminController {
         this.siteContentService = siteContentService;
         this.newsletterService = newsletterService;
         this.portfolioService = portfolioService;
-        this.uploadService = uploadService;
         this.categoriesService = categoriesService;
         this.articleService = articleService;
     }
@@ -183,6 +179,15 @@ let AdminController = class AdminController {
     deleteService(id) {
         return this.siteContentService.deleteService(id);
     }
+    getAboutPage() {
+        return this.siteContentService.getAboutPagePublic();
+    }
+    upsertAboutPage(dto) {
+        return this.siteContentService.upsertAboutPage(dto);
+    }
+    deleteAboutPage() {
+        return this.siteContentService.deleteAboutPage();
+    }
     findAllNewsletter(page, limit) {
         const p = page ? parseInt(page, 10) : 1;
         const l = limit ? parseInt(limit, 10) : 10;
@@ -205,22 +210,6 @@ let AdminController = class AdminController {
     }
     removePortfolio(id) {
         return this.portfolioService.remove(id);
-    }
-    async uploadImage(file, folder) {
-        const subFolder = folder || 'general';
-        const url = await this.uploadService.uploadImage(file, subFolder);
-        return {
-            success: true,
-            data: { url },
-            message: { fa: 'تصویر با موفقیت آپلود شد', en: 'Image uploaded successfully' },
-        };
-    }
-    async deleteImage(url) {
-        await this.uploadService.deleteImage(url);
-        return {
-            success: true,
-            message: { fa: 'تصویر با موفقیت حذف شد', en: 'Image deleted successfully' },
-        };
     }
     createCategories(dto) { return this.categoriesService.create(dto); }
     findAllCategories() { return this.categoriesService.findAll(); }
@@ -621,6 +610,31 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "deleteService", null);
 __decorate([
+    (0, common_1.Get)('about'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "getAboutPage", null);
+__decorate([
+    (0, common_1.Put)('about'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [about_page_dto_1.UpdateAboutPageDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "upsertAboutPage", null);
+__decorate([
+    (0, common_1.Delete)('about'),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "deleteAboutPage", null);
+__decorate([
     (0, common_1.Get)('newsletter'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
@@ -693,31 +707,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "removePortfolio", null);
-__decorate([
-    (0, common_1.Post)('image'),
-    (0, swagger_1.ApiConsumes)('multipart/form-data'),
-    (0, swagger_1.ApiBody)({ type: upload_dto_1.UploadImageDto }),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
-    __param(0, (0, common_1.UploadedFile)()),
-    __param(1, (0, common_1.Body)('folder')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
-    __metadata("design:returntype", Promise)
-], AdminController.prototype, "uploadImage", null);
-__decorate([
-    (0, common_1.Delete)('image'),
-    (0, swagger_1.ApiBody)({ type: upload_dto_1.DeleteImageDto }),
-    (0, swagger_1.ApiBearerAuth)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
-    __param(0, (0, common_1.Body)('url')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", Promise)
-], AdminController.prototype, "deleteImage", null);
 __decorate([
     (0, common_1.Post)('categories'),
     (0, swagger_1.ApiBearerAuth)(),
@@ -824,7 +813,6 @@ exports.AdminController = AdminController = __decorate([
         site_content_service_1.SiteContentService,
         newsletter_service_1.NewsletterService,
         portfolio_service_1.PortfolioService,
-        upload_service_1.UploadService,
         categories_service_1.CategoriesService,
         article_service_1.ArticleService])
 ], AdminController);

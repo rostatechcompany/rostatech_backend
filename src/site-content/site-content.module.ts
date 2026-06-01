@@ -8,7 +8,7 @@ import { SiteContentService } from './site-content.service';
 import { SiteContentController } from './site-content.controller';
 import { AuthModule } from '../auth/auth.module';
 import { UploadModule } from '../upload/upload.module';
-
+import { AboutPage, AboutPageSchema } from './schemas/about-page.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -16,6 +16,7 @@ import { UploadModule } from '../upload/upload.module';
       { name: TeamMember.name, schema: TeamMemberSchema },
       { name: Client.name, schema: ClientSchema },
       { name: Service.name, schema: ServiceSchema },
+      { name: AboutPage.name, schema: AboutPageSchema  },
     ]),
     AuthModule,
     UploadModule,

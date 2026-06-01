@@ -30,6 +30,9 @@ let SiteContentController = class SiteContentController {
     getSettings() {
         return this.service.getSettings();
     }
+    getAboutPage() {
+        return this.service.getAboutPagePublic();
+    }
 };
 exports.SiteContentController = SiteContentController;
 __decorate([
@@ -56,6 +59,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], SiteContentController.prototype, "getSettings", null);
+__decorate([
+    (0, common_1.Get)('about'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], SiteContentController.prototype, "getAboutPage", null);
 exports.SiteContentController = SiteContentController = __decorate([
     (0, swagger_1.ApiTags)('Site Content'),
     (0, common_1.Controller)('site-content'),

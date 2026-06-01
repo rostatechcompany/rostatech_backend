@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateSettingsDto = exports.TextSectionDto = exports.SocialLinkDto = void 0;
+exports.UpdateSettingsDto = exports.SocialLinkDto = void 0;
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
 const swagger_1 = require("@nestjs/swagger");
@@ -30,37 +30,6 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], SocialLinkDto.prototype, "url", void 0);
-class TextSectionDto {
-    key;
-    title;
-    content;
-    image;
-}
-exports.TextSectionDto = TextSectionDto;
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], TextSectionDto.prototype, "key", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], TextSectionDto.prototype, "title", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], TextSectionDto.prototype, "content", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: String }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], TextSectionDto.prototype, "image", void 0);
 class UpdateSettingsDto {
     address;
     shortDescription;
@@ -69,7 +38,6 @@ class UpdateSettingsDto {
     projectsCount;
     satisfactionRate;
     partnerCompaniesCount;
-    textSections;
 }
 exports.UpdateSettingsDto = UpdateSettingsDto;
 __decorate([
@@ -115,11 +83,4 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], UpdateSettingsDto.prototype, "partnerCompaniesCount", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: [TextSectionDto] }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.ValidateNested)({ each: true }),
-    (0, class_transformer_1.Type)(() => TextSectionDto),
-    __metadata("design:type", Array)
-], UpdateSettingsDto.prototype, "textSections", void 0);
 //# sourceMappingURL=settings.dto.js.map

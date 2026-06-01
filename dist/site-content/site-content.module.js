@@ -17,6 +17,7 @@ const site_content_service_1 = require("./site-content.service");
 const site_content_controller_1 = require("./site-content.controller");
 const auth_module_1 = require("../auth/auth.module");
 const upload_module_1 = require("../upload/upload.module");
+const about_page_schema_1 = require("./schemas/about-page.schema");
 let SiteContentModule = class SiteContentModule {
 };
 exports.SiteContentModule = SiteContentModule;
@@ -28,6 +29,7 @@ exports.SiteContentModule = SiteContentModule = __decorate([
                 { name: team_member_schema_1.TeamMember.name, schema: team_member_schema_1.TeamMemberSchema },
                 { name: client_schema_1.Client.name, schema: client_schema_1.ClientSchema },
                 { name: service_schema_1.Service.name, schema: service_schema_1.ServiceSchema },
+                { name: about_page_schema_1.AboutPage.name, schema: about_page_schema_1.AboutPageSchema },
             ]),
             auth_module_1.AuthModule,
             upload_module_1.UploadModule,

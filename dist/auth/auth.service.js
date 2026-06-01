@@ -52,12 +52,38 @@ const mongoose_2 = require("mongoose");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = __importStar(require("bcrypt"));
 const admin_schema_1 = require("../admin/schemas/admin.schema");
+const config_1 = require("@nestjs/config");
 let AuthService = class AuthService {
     adminModel;
     jwtService;
-    constructor(adminModel, jwtService) {
+    configService;
+    constructor(adminModel, jwtService, configService) {
         this.adminModel = adminModel;
         this.jwtService = jwtService;
+        this.configService = configService;
+    }
+    async initSuperAdmin(dto) {
+        const env = this.configService.get('NODE_ENV');
+        if (env !== 'development') {
+            throw new common_1.BadRequestException('این مسیر فقط در محیط توسعه در دسترس است');
+        }
+        const existing = await this.adminModel.findOne({ role: admin_schema_1.AdminRole.SUPER_ADMIN });
+        if (existing) {
+            throw new common_1.BadRequestException('سوپر ادمین از قبل وجود دارد');
+        }
+        const duplicate = await this.adminModel.findOne({ username: dto.username });
+        if (duplicate) {
+            throw new common_1.ConflictException('این نام کاربری قبلاً ثبت شده است');
+        }
+        const hashedPassword = await bcrypt.hash(dto.password, 12);
+        await this.adminModel.create({
+            username: dto.username,
+            password: hashedPassword,
+            fullName: dto.fullName,
+            role: admin_schema_1.AdminRole.SUPER_ADMIN,
+            status: admin_schema_1.AdminStatus.ACTIVE,
+        });
+        return { message: 'سوپر ادمین با موفقیت ایجاد شد. لطفاً این روت را غیرفعال کنید.' };
     }
     async register(registerAdminDto) {
         const existingAdmin = await this.adminModel.findOne({
@@ -116,6 +142,7 @@ exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(admin_schema_1.Admin.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        config_1.ConfigService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

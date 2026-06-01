@@ -13,6 +13,12 @@ import { LoginDto } from './dto/login.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Post('init-superadmin')
+  @ApiOperation({ summary: "create super admin" })
+  async initSuperAdmin(@Body() dto: RegisterAdminDto) {
+    return this.authService.initSuperAdmin(dto);
+  }
+  
   @Post('register')
   @ApiOperation({ summary: 'New admin registration (requires super admin approval)' })
   register(@Body() registerAdminDto: RegisterAdminDto) {

@@ -11,19 +11,6 @@ export class SocialLink {
   @Prop({ required: true })
   url!: string;
 }
-export class TextSection {
-  @Prop({ required: true })
-  key!: string; // e.g., 'about_us', 'vision', 'mission'
-
-  @Prop({ required: true })
-  title!: string;
-
-  @Prop({ required: true })
-  content!: string;
-
-  @Prop({ type: String, })
-  image!: string;
-}
 
 @Schema({ timestamps: true })
 export class Settings {
@@ -47,10 +34,6 @@ export class Settings {
 
   @Prop({ default: 0 })
   partnerCompaniesCount!: number;
-
-  @Prop({ type: [TextSection] })
-  textSections!: TextSection[];
 }
 
 export const SettingsSchema = SchemaFactory.createForClass(Settings);
-export const TextSectionSchema = SchemaFactory.createForClass(TextSection);

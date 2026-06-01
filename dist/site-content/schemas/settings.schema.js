@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TextSectionSchema = exports.SettingsSchema = exports.Settings = exports.TextSection = exports.SocialLink = void 0;
+exports.SettingsSchema = exports.Settings = exports.SocialLink = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 let SocialLink = class SocialLink {
     name;
@@ -27,29 +27,6 @@ __decorate([
 exports.SocialLink = SocialLink = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], SocialLink);
-class TextSection {
-    key;
-    title;
-    content;
-    image;
-}
-exports.TextSection = TextSection;
-__decorate([
-    (0, mongoose_1.Prop)({ required: true }),
-    __metadata("design:type", String)
-], TextSection.prototype, "key", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ required: true }),
-    __metadata("design:type", String)
-], TextSection.prototype, "title", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ required: true }),
-    __metadata("design:type", String)
-], TextSection.prototype, "content", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ type: String, }),
-    __metadata("design:type", String)
-], TextSection.prototype, "image", void 0);
 let Settings = class Settings {
     address;
     shortDescription;
@@ -58,7 +35,6 @@ let Settings = class Settings {
     projectsCount;
     satisfactionRate;
     partnerCompaniesCount;
-    textSections;
 };
 exports.Settings = Settings;
 __decorate([
@@ -89,13 +65,8 @@ __decorate([
     (0, mongoose_1.Prop)({ default: 0 }),
     __metadata("design:type", Number)
 ], Settings.prototype, "partnerCompaniesCount", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ type: [TextSection] }),
-    __metadata("design:type", Array)
-], Settings.prototype, "textSections", void 0);
 exports.Settings = Settings = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Settings);
 exports.SettingsSchema = mongoose_1.SchemaFactory.createForClass(Settings);
-exports.TextSectionSchema = mongoose_1.SchemaFactory.createForClass(TextSection);
 //# sourceMappingURL=settings.schema.js.map

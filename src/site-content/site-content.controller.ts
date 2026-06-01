@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SiteContentService } from './site-content.service';
 
@@ -25,5 +25,10 @@ export class SiteContentController {
   @Get('settings')
   getSettings() {
     return this.service.getSettings();
+  }
+
+  @Get('about')
+  getAboutPage() {
+    return this.service.getAboutPagePublic();
   }
 }

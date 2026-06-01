@@ -12,25 +12,6 @@ export class SocialLinkDto {
   url!: string;
 }
 
-export class TextSectionDto {
-  @ApiProperty()
-  @IsString() @IsNotEmpty()
-  key!: string;
-
-  @ApiProperty()
-  @IsString() @IsNotEmpty()
-  title!: string;
-
-  @ApiProperty()
-  @IsString() @IsNotEmpty()
-  content!: string;
-
-  @ApiPropertyOptional({ type: String})
-  @IsOptional()
-  @IsString()
-  image?: string;
-}
-
 export class UpdateSettingsDto {
   @ApiPropertyOptional()
   @IsOptional() @IsString()
@@ -60,9 +41,4 @@ export class UpdateSettingsDto {
   @ApiPropertyOptional()
   @IsOptional() @IsNumber()
   partnerCompaniesCount?: number;
-
-  @ApiPropertyOptional({ type: [TextSectionDto] })
-  @IsOptional() @ValidateNested({ each: true })
-  @Type(() => TextSectionDto)
-  textSections?: TextSectionDto[];
 }

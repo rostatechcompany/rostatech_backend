@@ -20,13 +20,13 @@ import { NewsletterService } from '../newsletter/newsletter.service';
 import { PortfolioService } from '../portfolio/portfolio.service';
 import { CreatePortfolioDto } from '../portfolio/dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from '../portfolio/dto/update-portfolio.dto';
-import { UploadService } from '../upload/upload.service';
 import { CategoriesService } from '../categories/categories.service';
 import { CreateCategoryDto } from '../categories/dto/create-category.dto';
 import { UpdateCategoryDto } from '../categories/dto/update-category.dto';
 import { ArticleService } from '../article/article.service';
 import { CreateArticleDto } from '../article/dto/create-article.dto';
 import { UpdateArticleDto } from '../article/dto/update-article.dto';
+import { UpdateAboutPageDto } from '../site-content/dto/about-page.dto';
 export declare class AdminController {
     private readonly adminService;
     private readonly cooperationTypesService;
@@ -35,10 +35,9 @@ export declare class AdminController {
     private readonly siteContentService;
     private readonly newsletterService;
     private readonly portfolioService;
-    private readonly uploadService;
     private readonly categoriesService;
     private readonly articleService;
-    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService, siteContentService: SiteContentService, newsletterService: NewsletterService, portfolioService: PortfolioService, uploadService: UploadService, categoriesService: CategoriesService, articleService: ArticleService);
+    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService, siteContentService: SiteContentService, newsletterService: NewsletterService, portfolioService: PortfolioService, categoriesService: CategoriesService, articleService: ArticleService);
     findAll(req: any): Promise<{
         createdAtJalali: string;
         username: string;
@@ -282,6 +281,30 @@ export declare class AdminController {
             en: string;
         };
     }>;
+    getAboutPage(): Promise<import("../site-content/schemas/about-page.schema").AboutPage & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    }>;
+    upsertAboutPage(dto: UpdateAboutPageDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+        page: import("mongoose").Document<unknown, {}, import("../site-content/schemas/about-page.schema").AboutPageDocument, {}, import("mongoose").DefaultSchemaOptions> & import("../site-content/schemas/about-page.schema").AboutPage & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }> & {
+            __v: number;
+        } & {
+            id: string;
+        };
+    }>;
+    deleteAboutPage(): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
     findAllNewsletter(page?: string, limit?: string): Promise<{
         data: {
             _id: any;
@@ -317,23 +340,6 @@ export declare class AdminController {
         };
     }>;
     removePortfolio(id: string): Promise<{
-        message: {
-            fa: string;
-            en: string;
-        };
-    }>;
-    uploadImage(file: Express.Multer.File, folder?: string): Promise<{
-        success: boolean;
-        data: {
-            url: string;
-        };
-        message: {
-            fa: string;
-            en: string;
-        };
-    }>;
-    deleteImage(url: string): Promise<{
-        success: boolean;
         message: {
             fa: string;
             en: string;

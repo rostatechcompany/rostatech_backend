@@ -57,25 +57,6 @@ let AdminService = class AdminService {
     constructor(adminModel) {
         this.adminModel = adminModel;
     }
-    async onModuleInit() {
-        const superAdminExists = await this.adminModel.findOne({
-            role: admin_schema_1.AdminRole.SUPER_ADMIN
-        });
-        if (!superAdminExists) {
-            const hashedPassword = await bcrypt.hash('Admin@123', 12);
-            await this.adminModel.create({
-                username: 'superadmin',
-                password: hashedPassword,
-                fullName: 'Super Admin',
-                role: admin_schema_1.AdminRole.SUPER_ADMIN,
-                status: admin_schema_1.AdminStatus.ACTIVE,
-            });
-            console.log('Default super admin created');
-            console.log('Username: superadmin');
-            console.log('Password: Admin@123');
-            console.log('Please change password after first login!');
-        }
-    }
     async getAllAdmins(currentAdmin) {
         if (currentAdmin.role !== admin_schema_1.AdminRole.SUPER_ADMIN) {
             throw new common_1.ForbiddenException('فقط سوپر ادمین میتواند لیست همه ادمین‌ها را ببیند');

@@ -22,4 +22,9 @@ export declare class SiteContentController {
     }> & {
         __v: number;
     }>;
+    getAboutPage(): Promise<import("./schemas/about-page.schema").AboutPage & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    }>;
 }

@@ -8,13 +8,16 @@ import { CreateTeamMemberDto, UpdateTeamMemberDto } from './dto/team-member.dto'
 import { CreateClientDto, UpdateClientDto } from './dto/client.dto';
 import { CreateServiceDto, UpdateServiceDto } from './dto/service.dto';
 import { UploadService } from '../upload/upload.service';
+import { AboutPage, AboutPageDocument } from './schemas/about-page.schema';
+import { UpdateAboutPageDto } from './dto/about-page.dto';
 export declare class SiteContentService {
     private settingsModel;
     private teamModel;
     private clientModel;
     private serviceModel;
+    private aboutPageModel;
     private uploadService;
-    constructor(settingsModel: Model<SettingsDocument>, teamModel: Model<TeamMemberDocument>, clientModel: Model<ClientDocument>, serviceModel: Model<ServiceDocument>, uploadService: UploadService);
+    constructor(settingsModel: Model<SettingsDocument>, teamModel: Model<TeamMemberDocument>, clientModel: Model<ClientDocument>, serviceModel: Model<ServiceDocument>, aboutPageModel: Model<AboutPageDocument>, uploadService: UploadService);
     private initSettings;
     getSettings(): Promise<Settings & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
         _id: import("mongoose").Types.ObjectId;
@@ -95,5 +98,29 @@ export declare class SiteContentService {
             fa: string;
             en: string;
         };
+    }>;
+    upsertAboutPage(dto: UpdateAboutPageDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+        page: import("mongoose").Document<unknown, {}, AboutPageDocument, {}, import("mongoose").DefaultSchemaOptions> & AboutPage & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }> & {
+            __v: number;
+        } & {
+            id: string;
+        };
+    }>;
+    deleteAboutPage(): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    getAboutPagePublic(): Promise<AboutPage & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
     }>;
 }

@@ -23,6 +23,9 @@ let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
+    async initSuperAdmin(dto) {
+        return this.authService.initSuperAdmin(dto);
+    }
     register(registerAdminDto) {
         return this.authService.register(registerAdminDto);
     }
@@ -31,6 +34,14 @@ let AuthController = class AuthController {
     }
 };
 exports.AuthController = AuthController;
+__decorate([
+    (0, common_1.Post)('init-superadmin'),
+    (0, swagger_1.ApiOperation)({ summary: "create super admin" }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [register_admin_dto_1.RegisterAdminDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "initSuperAdmin", null);
 __decorate([
     (0, common_1.Post)('register'),
     (0, swagger_1.ApiOperation)({ summary: 'New admin registration (requires super admin approval)' }),

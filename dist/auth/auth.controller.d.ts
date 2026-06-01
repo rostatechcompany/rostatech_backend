@@ -4,6 +4,9 @@ import { LoginDto } from './dto/login.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
+    initSuperAdmin(dto: RegisterAdminDto): Promise<{
+        message: string;
+    }>;
     register(registerAdminDto: RegisterAdminDto): Promise<{
         message: {
             fa: string;

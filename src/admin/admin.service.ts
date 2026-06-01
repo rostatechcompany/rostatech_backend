@@ -4,7 +4,6 @@ import {
   NotFoundException,
   ForbiddenException,
   BadRequestException ,
-  OnModuleInit,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -16,32 +15,10 @@ import { ChangeAdminPasswordDto} from './dto/change-admin-password.dto.ts';
 import { JalaliDateUtil } from '../common/utils/jalali';
 
 @Injectable()
-export class AdminService implements OnModuleInit {
+export class AdminService {
   constructor(
     @InjectModel(Admin.name) private adminModel: Model<AdminDocument>,
   ) {}
-
-  // Initialize super admin on first run
-  async onModuleInit() {
-    const superAdminExists = await this.adminModel.findOne({ 
-      role: AdminRole.SUPER_ADMIN 
-    });
-    
-    if (!superAdminExists) {
-      const hashedPassword = await bcrypt.hash('Admin@123', 12);
-      await this.adminModel.create({
-        username: 'superadmin',
-        password: hashedPassword,
-        fullName: 'Super Admin',
-        role: AdminRole.SUPER_ADMIN,
-        status: AdminStatus.ACTIVE,
-      });
-      console.log('Default super admin created');
-      console.log('Username: superadmin');
-      console.log('Password: Admin@123');
-      console.log('Please change password after first login!');
-    }
-  }
 
   // Super admin routes
   // ==========================================================

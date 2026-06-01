@@ -10,6 +10,8 @@ import { CreateTeamMemberDto, UpdateTeamMemberDto } from './dto/team-member.dto'
 import { CreateClientDto, UpdateClientDto } from './dto/client.dto';
 import { CreateServiceDto, UpdateServiceDto } from './dto/service.dto';
 import { UploadService } from '../upload/upload.service';
+import { AboutPage, AboutPageDocument } from './schemas/about-page.schema';
+import { UpdateAboutPageDto} from './dto/about-page.dto';
 
 @Injectable()
 export class SiteContentService {
@@ -18,7 +20,7 @@ export class SiteContentService {
     @InjectModel(TeamMember.name) private teamModel: Model<TeamMemberDocument>,
     @InjectModel(Client.name) private clientModel: Model<ClientDocument>,
     @InjectModel(Service.name) private serviceModel: Model<ServiceDocument>,
-    
+    @InjectModel(AboutPage.name) private aboutPageModel: Model<AboutPageDocument>,
     private uploadService: UploadService,
   ) {
     // first init settings
@@ -40,61 +42,16 @@ export class SiteContentService {
       .lean();
 
     if (!settings) throw new NotFoundException('تنظیمات یافت نشد');
-
-    if (settings.textSections && settings.textSections.length > 0) {
-      settings.textSections = settings.textSections.map(
-        (section: any) => {
-          const { createdAt, updatedAt, ...rest } = section;
-          return rest;
-        }
-      )
-    }
     return settings;
   }
 
   async updateSettings(dto: UpdateSettingsDto) {
-    // current settings
-    const current = await this.settingsModel.findOne();
-    if (!current) {
-      const created = await this.settingsModel.create(dto);
-      return { message: { fa: 'تنظیمات ایجاد شد', en: 'Settings created successfully' } };
-    }
-
-    // delete old image of textSections
-    if (dto.textSections !== undefined) {
-      const oldSections = current.textSections ?? [];
-      const newSectionsMap = new Map(dto.textSections.map(s => [s.key, s]));
-
-      for (const oldSection of oldSections) {
-        const oldImage = oldSection.image;
-        if (!oldImage) continue;
-
-        const newSection = newSectionsMap.get(oldSection.key);
-        if (!newSection) {
-          // if all section deleted, its image would too..
-          try {
-            await this.uploadService.deleteImage(oldImage);
-          } catch (e) { console.error('خطا در حذف تصویر حذف‌شده:', e); }
-        } else if (newSection.image !== oldImage) {
-          try {
-            await this.uploadService.deleteImage(oldImage);
-          } catch (e) { console.error('خطا در حذف تصویر قدیمی:', e); }
-        }
-      }
-    }
-
-    // update doc
     await this.settingsModel.findOneAndUpdate({}, dto, {
       new: true,
       upsert: true,
     }).select('-__v -createdAt -updatedAt');
-
-    return {
-      message: {
-        fa: 'تنظیمات با موفقیت تغییر یافت',
-        en: 'Settings changed successfully',
-      },
-    };
+    return { message: { fa: 'تنظیمات با موفقیت تغییر یافت', 
+                        en: 'Settings changed successfully' } };
   }
 
   // ---------- Team ----------
@@ -270,5 +227,40 @@ export class SiteContentService {
         en: 'Service removed',
       },
     };
+  }
+  //  ----------- About Page -----------------
+
+  // admin: upsert
+  async upsertAboutPage(dto: UpdateAboutPageDto) {
+    const existing = await this.aboutPageModel.findOne();
+    
+    if (dto.coverImageUrl !== undefined && existing?.coverImageUrl && existing.coverImageUrl !== dto.coverImageUrl) {
+      try { await this.uploadService.deleteImage(existing.coverImageUrl); } catch (e) { console.error(e); }
+    }
+
+    const page = await this.aboutPageModel.findOneAndUpdate(
+      {},
+      { $set: dto },
+      { new: true, upsert: true }
+    ).select('-__v -createdAt -updatedAt');
+
+    return { message: { fa: 'صفحه درباره ما بروزرسانی شد', en: 'About page updated' }, page };
+  }
+
+  // Admin: delete 
+  async deleteAboutPage() {
+    const page = await this.aboutPageModel.findOne();
+    if (page?.coverImageUrl) {
+      try { await this.uploadService.deleteImage(page.coverImageUrl); } catch (e) { console.error(e); }
+    }
+    await this.aboutPageModel.deleteMany();
+    return { message: { fa: 'صفحه درباره ما حذف شد', en: 'About page deleted' } };
+  }
+
+  // Public: get active
+  async getAboutPagePublic() {
+    const page = await this.aboutPageModel.findOne({ isActive: true }).select('-__v -createdAt -updatedAt').lean();
+    if (!page) throw new NotFoundException('صفحه درباره ما یافت نشد');
+    return page;
   }
 }

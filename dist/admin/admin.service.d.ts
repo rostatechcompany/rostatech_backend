@@ -1,13 +1,11 @@
-import { OnModuleInit } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { AdminDocument, AdminRole, AdminStatus } from './schemas/admin.schema';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { ChangeOwnPasswordDto } from './dto/change-own-password.dto';
 import { ChangeAdminPasswordDto } from './dto/change-admin-password.dto.ts';
-export declare class AdminService implements OnModuleInit {
+export declare class AdminService {
     private adminModel;
     constructor(adminModel: Model<AdminDocument>);
-    onModuleInit(): Promise<void>;
     getAllAdmins(currentAdmin: any): Promise<{
         createdAtJalali: string;
         username: string;
