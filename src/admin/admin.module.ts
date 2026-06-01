@@ -10,6 +10,9 @@ import { ConsultationModule} from '../consultation/consultation.module';
 import { SiteContentModule} from '../site-content/site-content.module';
 import { NewsletterModule}from '../newsletter/newsletter.module';
 import { PortfolioModule}from '../portfolio/portfolio.module';
+import { UploadModule} from '../upload/upload.module';
+import { CategoriesModule}from '../categories/categories.module';
+import { ArticleModule} from 'src/article/article.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { PortfolioModule}from '../portfolio/portfolio.module';
     SiteContentModule,
     NewsletterModule,
     PortfolioModule,
+    UploadModule,
+    CategoriesModule,
+    ArticleModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

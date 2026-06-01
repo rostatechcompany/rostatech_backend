@@ -6,12 +6,14 @@ import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import { TeamMember, TeamMemberDocument } from '../site-content/schemas/team-member.schema';
 import { JalaliDateUtil } from '../common/utils/jalali';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class PortfolioService {
   constructor(
     @InjectModel(Portfolio.name) private portfolioModel: Model<PortfolioDocument>,
     @InjectModel(TeamMember.name) private teamMemberModel: Model<TeamMemberDocument>,
+    private uploadService: UploadService,
   ) {}
 
   // public (just picture and url of each )
@@ -32,6 +34,10 @@ export class PortfolioService {
       .lean();
 
     if (!item) throw new NotFoundException('نمونه کار یافت نشد');
+
+    if (item.teamMembers && Array.isArray(item.teamMembers)) {
+      (item as any).teamMembers = item.teamMembers.map((member: any) => member.fullName);
+    }
     return item;
   }
 
@@ -89,9 +95,52 @@ export class PortfolioService {
   }
 
   // edit
+  // async update(id: string, dto: UpdatePortfolioDto) {
+  //   const portfolio = await this.portfolioModel.findById(id);
+  //   if (!portfolio) throw new NotFoundException('نمونه کار یافت نشد');
+
+  //   if (dto.teamMemberIds) {
+  //     const members = await this.teamMemberModel.find({ _id: { $in: dto.teamMemberIds } });
+  //     if (members.length !== dto.teamMemberIds.length) {
+  //       throw new NotFoundException('یک یا چند عضو تیم یافت نشدند');
+  //     }
+  //     (dto as any).teamMembers = members.map(m => ({
+  //       memberId: m._id.toString(),
+  //       fullName: m.fullName,
+  //       position: m.position,
+  //     }));
+  //     delete dto.teamMemberIds;
+  //   }
+
+  //   Object.assign(portfolio, dto);
+  //   await portfolio.save();
+  //   return { message: {fa: 'نمونه کار با موفقیت ویرایش شد', 
+  //                      en: 'The sample was successfully edited'} };
+  // }
   async update(id: string, dto: UpdatePortfolioDto) {
     const portfolio = await this.portfolioModel.findById(id);
     if (!portfolio) throw new NotFoundException('نمونه کار یافت نشد');
+
+    // delete old image if they change
+    if (dto.desktopImageUrl !== undefined && dto.desktopImageUrl !== portfolio.desktopImageUrl) {
+      if (portfolio.desktopImageUrl) {
+        try {
+          await this.uploadService.deleteImage(portfolio.desktopImageUrl);
+        } catch (error) {
+          console.error('خطا در حذف تصویر دسکتاپ قدیمی:', error);
+        }
+      }
+    }
+
+    if (dto.mobileImageUrl !== undefined && dto.mobileImageUrl !== portfolio.mobileImageUrl) {
+      if (portfolio.mobileImageUrl) {
+        try {
+          await this.uploadService.deleteImage(portfolio.mobileImageUrl);
+        } catch (error) {
+          console.error('خطا در حذف تصویر موبایل قدیمی:', error);
+        }
+      }
+    }
 
     if (dto.teamMemberIds) {
       const members = await this.teamMemberModel.find({ _id: { $in: dto.teamMemberIds } });
@@ -108,14 +157,47 @@ export class PortfolioService {
 
     Object.assign(portfolio, dto);
     await portfolio.save();
-    return { message: {fa: 'نمونه کار با موفقیت ویرایش شد', 
-                       en: 'The sample was successfully edited'} };
+
+    return {
+      message: {
+        fa: 'نمونه کار با موفقیت ویرایش شد',
+        en: 'The sample was successfully edited',
+      },
+    };
   }
 
   // delete
+  // async remove(id: string) {
+  //   const result = await this.portfolioModel.findByIdAndDelete(id);
+  //   if (!result) throw new NotFoundException('نمونه کار یافت نشد');
+  //   return { message: {fa: 'نمونه کار حذف شد', en: 'Work sample deleted'}};
+  // }
   async remove(id: string) {
-    const result = await this.portfolioModel.findByIdAndDelete(id);
-    if (!result) throw new NotFoundException('نمونه کار یافت نشد');
-    return { message: {fa: 'نمونه کار حذف شد', en: 'Work sample deleted'}};
+    const portfolio = await this.portfolioModel.findById(id);
+    if (!portfolio) throw new NotFoundException('نمونه کار یافت نشد');
+
+    // delete image
+    if (portfolio.desktopImageUrl) {
+      try {
+        await this.uploadService.deleteImage(portfolio.desktopImageUrl);
+      } catch (error) {
+        console.error('خطا در حذف تصویر دسکتاپ:', error);
+      }
+    }
+    if (portfolio.mobileImageUrl) {
+      try {
+        await this.uploadService.deleteImage(portfolio.mobileImageUrl);
+      } catch (error) {
+        console.error('خطا در حذف تصویر موبایل:', error);
+      }
+    }
+
+    await this.portfolioModel.findByIdAndDelete(id);
+    return {
+      message: {
+        fa: 'نمونه کار حذف شد',
+        en: 'Work sample deleted',
+      },
+    };
   }
 }

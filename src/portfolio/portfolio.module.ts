@@ -5,6 +5,7 @@ import { TeamMember, TeamMemberSchema } from '../site-content/schemas/team-membe
 import { PortfolioService } from './portfolio.service';
 import { PortfolioController } from './portfolio.controller';
 import { AuthModule } from '../auth/auth.module';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthModule } from '../auth/auth.module';
       { name: TeamMember.name, schema: TeamMemberSchema },
     ]),
     AuthModule,
+    UploadModule,
   ],
   controllers: [PortfolioController],
   providers: [PortfolioService],

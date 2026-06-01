@@ -26,7 +26,10 @@ let RolesGuard = class RolesGuard {
             return true;
         }
         const { user } = context.switchToHttp().getRequest();
-        return requiredRoles.includes(user.role);
+        if (!requiredRoles.includes(user.role)) {
+            throw new common_1.ForbiddenException('دسترسی فقط برای سوپر ادمین مجاز است');
+        }
+        return true;
     }
 };
 exports.RolesGuard = RolesGuard;

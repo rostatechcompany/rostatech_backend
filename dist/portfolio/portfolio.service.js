@@ -19,12 +19,15 @@ const mongoose_2 = require("mongoose");
 const portfolio_schema_1 = require("./schemas/portfolio.schema");
 const team_member_schema_1 = require("../site-content/schemas/team-member.schema");
 const jalali_1 = require("../common/utils/jalali");
+const upload_service_1 = require("../upload/upload.service");
 let PortfolioService = class PortfolioService {
     portfolioModel;
     teamMemberModel;
-    constructor(portfolioModel, teamMemberModel) {
+    uploadService;
+    constructor(portfolioModel, teamMemberModel, uploadService) {
         this.portfolioModel = portfolioModel;
         this.teamMemberModel = teamMemberModel;
+        this.uploadService = uploadService;
     }
     async findAllPublic() {
         const items = await this.portfolioModel
@@ -40,6 +43,9 @@ let PortfolioService = class PortfolioService {
             .lean();
         if (!item)
             throw new common_1.NotFoundException('نمونه کار یافت نشد');
+        if (item.teamMembers && Array.isArray(item.teamMembers)) {
+            item.teamMembers = item.teamMembers.map((member) => member.fullName);
+        }
         return item;
     }
     async create(dto) {
@@ -86,6 +92,26 @@ let PortfolioService = class PortfolioService {
         const portfolio = await this.portfolioModel.findById(id);
         if (!portfolio)
             throw new common_1.NotFoundException('نمونه کار یافت نشد');
+        if (dto.desktopImageUrl !== undefined && dto.desktopImageUrl !== portfolio.desktopImageUrl) {
+            if (portfolio.desktopImageUrl) {
+                try {
+                    await this.uploadService.deleteImage(portfolio.desktopImageUrl);
+                }
+                catch (error) {
+                    console.error('خطا در حذف تصویر دسکتاپ قدیمی:', error);
+                }
+            }
+        }
+        if (dto.mobileImageUrl !== undefined && dto.mobileImageUrl !== portfolio.mobileImageUrl) {
+            if (portfolio.mobileImageUrl) {
+                try {
+                    await this.uploadService.deleteImage(portfolio.mobileImageUrl);
+                }
+                catch (error) {
+                    console.error('خطا در حذف تصویر موبایل قدیمی:', error);
+                }
+            }
+        }
         if (dto.teamMemberIds) {
             const members = await this.teamMemberModel.find({ _id: { $in: dto.teamMemberIds } });
             if (members.length !== dto.teamMemberIds.length) {
@@ -100,14 +126,40 @@ let PortfolioService = class PortfolioService {
         }
         Object.assign(portfolio, dto);
         await portfolio.save();
-        return { message: { fa: 'نمونه کار با موفقیت ویرایش شد',
-                en: 'The sample was successfully edited' } };
+        return {
+            message: {
+                fa: 'نمونه کار با موفقیت ویرایش شد',
+                en: 'The sample was successfully edited',
+            },
+        };
     }
     async remove(id) {
-        const result = await this.portfolioModel.findByIdAndDelete(id);
-        if (!result)
+        const portfolio = await this.portfolioModel.findById(id);
+        if (!portfolio)
             throw new common_1.NotFoundException('نمونه کار یافت نشد');
-        return { message: { fa: 'نمونه کار حذف شد', en: 'Work sample deleted' } };
+        if (portfolio.desktopImageUrl) {
+            try {
+                await this.uploadService.deleteImage(portfolio.desktopImageUrl);
+            }
+            catch (error) {
+                console.error('خطا در حذف تصویر دسکتاپ:', error);
+            }
+        }
+        if (portfolio.mobileImageUrl) {
+            try {
+                await this.uploadService.deleteImage(portfolio.mobileImageUrl);
+            }
+            catch (error) {
+                console.error('خطا در حذف تصویر موبایل:', error);
+            }
+        }
+        await this.portfolioModel.findByIdAndDelete(id);
+        return {
+            message: {
+                fa: 'نمونه کار حذف شد',
+                en: 'Work sample deleted',
+            },
+        };
     }
 };
 exports.PortfolioService = PortfolioService;
@@ -116,6 +168,7 @@ exports.PortfolioService = PortfolioService = __decorate([
     __param(0, (0, mongoose_1.InjectModel)(portfolio_schema_1.Portfolio.name)),
     __param(1, (0, mongoose_1.InjectModel)(team_member_schema_1.TeamMember.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        mongoose_2.Model])
+        mongoose_2.Model,
+        upload_service_1.UploadService])
 ], PortfolioService);
 //# sourceMappingURL=portfolio.service.js.map

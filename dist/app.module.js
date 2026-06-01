@@ -20,6 +20,9 @@ const consultation_module_1 = require("./consultation/consultation.module");
 const site_content_module_1 = require("./site-content/site-content.module");
 const newsletter_module_1 = require("./newsletter/newsletter.module");
 const portfolio_module_1 = require("./portfolio/portfolio.module");
+const upload_module_1 = require("./upload/upload.module");
+const categories_module_1 = require("./categories/categories.module");
+const article_module_1 = require("./article/article.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -45,6 +48,9 @@ exports.AppModule = AppModule = __decorate([
             site_content_module_1.SiteContentModule,
             newsletter_module_1.NewsletterModule,
             portfolio_module_1.PortfolioModule,
+            upload_module_1.UploadModule,
+            categories_module_1.CategoriesModule,
+            article_module_1.ArticleModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

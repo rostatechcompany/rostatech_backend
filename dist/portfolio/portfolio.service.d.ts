@@ -3,10 +3,12 @@ import { Portfolio, PortfolioDocument } from './schemas/portfolio.schema';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import { TeamMemberDocument } from '../site-content/schemas/team-member.schema';
+import { UploadService } from '../upload/upload.service';
 export declare class PortfolioService {
     private portfolioModel;
     private teamMemberModel;
-    constructor(portfolioModel: Model<PortfolioDocument>, teamMemberModel: Model<TeamMemberDocument>);
+    private uploadService;
+    constructor(portfolioModel: Model<PortfolioDocument>, teamMemberModel: Model<TeamMemberDocument>, uploadService: UploadService);
     findAllPublic(): Promise<(Portfolio & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
         _id: import("mongoose").Types.ObjectId;
     }> & {

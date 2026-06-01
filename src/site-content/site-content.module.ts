@@ -7,6 +7,7 @@ import { Service, ServiceSchema } from './schemas/service.schema';
 import { SiteContentService } from './site-content.service';
 import { SiteContentController } from './site-content.controller';
 import { AuthModule } from '../auth/auth.module';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from '../auth/auth.module';
       { name: Service.name, schema: ServiceSchema },
     ]),
     AuthModule,
+    UploadModule,
   ],
   controllers: [SiteContentController, SiteContentController],
   providers: [SiteContentService],

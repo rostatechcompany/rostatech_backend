@@ -16,6 +16,7 @@ const service_schema_1 = require("./schemas/service.schema");
 const site_content_service_1 = require("./site-content.service");
 const site_content_controller_1 = require("./site-content.controller");
 const auth_module_1 = require("../auth/auth.module");
+const upload_module_1 = require("../upload/upload.module");
 let SiteContentModule = class SiteContentModule {
 };
 exports.SiteContentModule = SiteContentModule;
@@ -29,6 +30,7 @@ exports.SiteContentModule = SiteContentModule = __decorate([
                 { name: service_schema_1.Service.name, schema: service_schema_1.ServiceSchema },
             ]),
             auth_module_1.AuthModule,
+            upload_module_1.UploadModule,
         ],
         controllers: [site_content_controller_1.SiteContentController, site_content_controller_1.SiteContentController],
         providers: [site_content_service_1.SiteContentService],

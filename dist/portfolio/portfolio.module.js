@@ -14,6 +14,7 @@ const team_member_schema_1 = require("../site-content/schemas/team-member.schema
 const portfolio_service_1 = require("./portfolio.service");
 const portfolio_controller_1 = require("./portfolio.controller");
 const auth_module_1 = require("../auth/auth.module");
+const upload_module_1 = require("../upload/upload.module");
 let PortfolioModule = class PortfolioModule {
 };
 exports.PortfolioModule = PortfolioModule;
@@ -25,6 +26,7 @@ exports.PortfolioModule = PortfolioModule = __decorate([
                 { name: team_member_schema_1.TeamMember.name, schema: team_member_schema_1.TeamMemberSchema },
             ]),
             auth_module_1.AuthModule,
+            upload_module_1.UploadModule,
         ],
         controllers: [portfolio_controller_1.PortfolioController],
         providers: [portfolio_service_1.PortfolioService],

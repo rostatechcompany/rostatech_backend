@@ -7,10 +7,13 @@ import {
   Body, 
   Param, 
   UseGuards, 
+  UploadedFile,
+  UseInterceptors,
   Request,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AdminService } from './admin.service';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { ChangeAdminPasswordDto} from './dto/change-admin-password.dto.ts';
@@ -36,6 +39,14 @@ import { NewsletterService} from '../newsletter/newsletter.service';
 import { PortfolioService} from '../portfolio/portfolio.service';
 import { CreatePortfolioDto } from '../portfolio/dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from '../portfolio/dto/update-portfolio.dto';
+import { UploadService } from '../upload/upload.service';
+import { DeleteImageDto, UploadImageDto } from '../upload/dto/upload.dto';
+import { CategoriesService}from '../categories/categories.service';
+import { CreateCategoryDto } from '../categories/dto/create-category.dto';
+import { UpdateCategoryDto } from '../categories/dto/update-category.dto';
+import { ArticleService } from '../article/article.service';
+import { CreateArticleDto } from '../article/dto/create-article.dto';
+import { UpdateArticleDto } from '../article/dto/update-article.dto';
 
 @ApiTags('Admin Management')
 @Controller('admin')
@@ -47,6 +58,9 @@ export class AdminController {
               private readonly siteContentService: SiteContentService,
               private readonly newsletterService: NewsletterService,
               private readonly portfolioService: PortfolioService,
+              private readonly uploadService: UploadService,
+              private readonly categoriesService: CategoriesService,
+              private readonly articleService: ArticleService,
   ) {}
 
   @Get()
@@ -69,6 +83,7 @@ export class AdminController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard)
+  @Roles(AdminRole.SUPER_ADMIN)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update admin' })
   update(
@@ -456,4 +471,107 @@ export class AdminController {
   removePortfolio(@Param('id') id: string) {
     return this.portfolioService.remove(id);
   }
+
+  // for upload
+  // ===================================
+
+  @Post('image')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: UploadImageDto })
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('folder') folder?: string,
+  ) {
+    const subFolder = folder || 'general';
+    const url = await this.uploadService.uploadImage(file, subFolder);
+    return {
+      success: true,
+      data: { url },
+      message: { fa: 'تصویر با موفقیت آپلود شد', en: 'Image uploaded successfully' },
+    };
+  }
+
+  @Delete('image')
+  @ApiBody({ type: DeleteImageDto })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  async deleteImage(@Body('url') url: string) {
+    await this.uploadService.deleteImage(url);
+    return {
+      success: true,
+      message: { fa: 'تصویر با موفقیت حذف شد', en: 'Image deleted successfully' },
+    };
+  }
+
+  // for categories 
+  // =======================================
+  @Post('categories')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  createCategories(@Body() dto: CreateCategoryDto) { return this.categoriesService.create(dto); }
+
+  @Get('categories')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  findAllCategories() { return this.categoriesService.findAll(); }
+  
+  @Put('categories/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  updateCategories(@Param('id') id: string, @Body() dto: UpdateCategoryDto) { return this.categoriesService.update(id, dto); }
+
+  @Delete('categories/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  removeCategories(@Param('id') id: string) { return this.categoriesService.remove(id); }
+
+  // for articles
+  // ===================================
+  @Post('article')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  createArticle(@Body() dto: CreateArticleDto, @Request() req: any) {
+    return this.articleService.create(dto, req.user.userId);
+  }
+
+  @Get('articles')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  findAllArticle(@Query('page') page?: string, @Query('limit') limit?: string) {
+    return this.articleService.findAllAdmin(+(page || 1), +(limit || 10));
+  }
+
+  @Get('articles/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  findOne(@Param('id') id: string) { return this.articleService.findOneAdmin(id); }
+
+  @Put('articles/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  updateArticle(@Param('id') id: string, @Body() dto: UpdateArticleDto) {
+    return this.articleService.update(id, dto);
+  }
+
+  @Delete('articles/:id')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @Roles(AdminRole.SUPER_ADMIN)
+  removeArticle(@Param('id') id: string) { return this.articleService.remove(id); }
 }

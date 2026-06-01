@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const platform_express_1 = require("@nestjs/platform-express");
 const admin_service_1 = require("./admin.service");
 const update_admin_dto_1 = require("./dto/update-admin.dto");
 const change_admin_password_dto_ts_1 = require("./dto/change-admin-password.dto.ts");
@@ -40,6 +41,14 @@ const newsletter_service_1 = require("../newsletter/newsletter.service");
 const portfolio_service_1 = require("../portfolio/portfolio.service");
 const create_portfolio_dto_1 = require("../portfolio/dto/create-portfolio.dto");
 const update_portfolio_dto_1 = require("../portfolio/dto/update-portfolio.dto");
+const upload_service_1 = require("../upload/upload.service");
+const upload_dto_1 = require("../upload/dto/upload.dto");
+const categories_service_1 = require("../categories/categories.service");
+const create_category_dto_1 = require("../categories/dto/create-category.dto");
+const update_category_dto_1 = require("../categories/dto/update-category.dto");
+const article_service_1 = require("../article/article.service");
+const create_article_dto_1 = require("../article/dto/create-article.dto");
+const update_article_dto_1 = require("../article/dto/update-article.dto");
 let AdminController = class AdminController {
     adminService;
     cooperationTypesService;
@@ -48,7 +57,10 @@ let AdminController = class AdminController {
     siteContentService;
     newsletterService;
     portfolioService;
-    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService, siteContentService, newsletterService, portfolioService) {
+    uploadService;
+    categoriesService;
+    articleService;
+    constructor(adminService, cooperationTypesService, jobApplicationsService, consultationService, siteContentService, newsletterService, portfolioService, uploadService, categoriesService, articleService) {
         this.adminService = adminService;
         this.cooperationTypesService = cooperationTypesService;
         this.jobApplicationsService = jobApplicationsService;
@@ -56,6 +68,9 @@ let AdminController = class AdminController {
         this.siteContentService = siteContentService;
         this.newsletterService = newsletterService;
         this.portfolioService = portfolioService;
+        this.uploadService = uploadService;
+        this.categoriesService = categoriesService;
+        this.articleService = articleService;
     }
     findAll(req) {
         return this.adminService.getAllAdmins(req.user);
@@ -191,6 +206,37 @@ let AdminController = class AdminController {
     removePortfolio(id) {
         return this.portfolioService.remove(id);
     }
+    async uploadImage(file, folder) {
+        const subFolder = folder || 'general';
+        const url = await this.uploadService.uploadImage(file, subFolder);
+        return {
+            success: true,
+            data: { url },
+            message: { fa: 'تصویر با موفقیت آپلود شد', en: 'Image uploaded successfully' },
+        };
+    }
+    async deleteImage(url) {
+        await this.uploadService.deleteImage(url);
+        return {
+            success: true,
+            message: { fa: 'تصویر با موفقیت حذف شد', en: 'Image deleted successfully' },
+        };
+    }
+    createCategories(dto) { return this.categoriesService.create(dto); }
+    findAllCategories() { return this.categoriesService.findAll(); }
+    updateCategories(id, dto) { return this.categoriesService.update(id, dto); }
+    removeCategories(id) { return this.categoriesService.remove(id); }
+    createArticle(dto, req) {
+        return this.articleService.create(dto, req.user.userId);
+    }
+    findAllArticle(page, limit) {
+        return this.articleService.findAllAdmin(+(page || 1), +(limit || 10));
+    }
+    findOne(id) { return this.articleService.findOneAdmin(id); }
+    updateArticle(id, dto) {
+        return this.articleService.update(id, dto);
+    }
+    removeArticle(id) { return this.articleService.remove(id); }
 };
 exports.AdminController = AdminController;
 __decorate([
@@ -218,6 +264,7 @@ __decorate([
 __decorate([
     (0, common_1.Put)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.SUPER_ADMIN),
     (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiOperation)({ summary: 'Update admin' }),
     __param(0, (0, common_1.Param)('id')),
@@ -646,6 +693,127 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], AdminController.prototype, "removePortfolio", null);
+__decorate([
+    (0, common_1.Post)('image'),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({ type: upload_dto_1.UploadImageDto }),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)('folder')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "uploadImage", null);
+__decorate([
+    (0, common_1.Delete)('image'),
+    (0, swagger_1.ApiBody)({ type: upload_dto_1.DeleteImageDto }),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Body)('url')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AdminController.prototype, "deleteImage", null);
+__decorate([
+    (0, common_1.Post)('categories'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_category_dto_1.CreateCategoryDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "createCategories", null);
+__decorate([
+    (0, common_1.Get)('categories'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findAllCategories", null);
+__decorate([
+    (0, common_1.Put)('categories/:id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_category_dto_1.UpdateCategoryDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updateCategories", null);
+__decorate([
+    (0, common_1.Delete)('categories/:id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "removeCategories", null);
+__decorate([
+    (0, common_1.Post)('article'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_article_dto_1.CreateArticleDto, Object]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "createArticle", null);
+__decorate([
+    (0, common_1.Get)('articles'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false, type: Number }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false, type: Number }),
+    __param(0, (0, common_1.Query)('page')),
+    __param(1, (0, common_1.Query)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findAllArticle", null);
+__decorate([
+    (0, common_1.Get)('articles/:id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Put)('articles/:id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_article_dto_1.UpdateArticleDto]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "updateArticle", null);
+__decorate([
+    (0, common_1.Delete)('articles/:id'),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.ADMIN, admin_schema_1.AdminRole.SUPER_ADMIN),
+    (0, roles_decorator_1.Roles)(admin_schema_1.AdminRole.SUPER_ADMIN),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], AdminController.prototype, "removeArticle", null);
 exports.AdminController = AdminController = __decorate([
     (0, swagger_1.ApiTags)('Admin Management'),
     (0, common_1.Controller)('admin'),
@@ -655,6 +823,9 @@ exports.AdminController = AdminController = __decorate([
         consultation_service_1.ConsultationService,
         site_content_service_1.SiteContentService,
         newsletter_service_1.NewsletterService,
-        portfolio_service_1.PortfolioService])
+        portfolio_service_1.PortfolioService,
+        upload_service_1.UploadService,
+        categories_service_1.CategoriesService,
+        article_service_1.ArticleService])
 ], AdminController);
 //# sourceMappingURL=admin.controller.js.map

@@ -7,12 +7,14 @@ import { UpdateSettingsDto } from './dto/settings.dto';
 import { CreateTeamMemberDto, UpdateTeamMemberDto } from './dto/team-member.dto';
 import { CreateClientDto, UpdateClientDto } from './dto/client.dto';
 import { CreateServiceDto, UpdateServiceDto } from './dto/service.dto';
+import { UploadService } from '../upload/upload.service';
 export declare class SiteContentService {
     private settingsModel;
     private teamModel;
     private clientModel;
     private serviceModel;
-    constructor(settingsModel: Model<SettingsDocument>, teamModel: Model<TeamMemberDocument>, clientModel: Model<ClientDocument>, serviceModel: Model<ServiceDocument>);
+    private uploadService;
+    constructor(settingsModel: Model<SettingsDocument>, teamModel: Model<TeamMemberDocument>, clientModel: Model<ClientDocument>, serviceModel: Model<ServiceDocument>, uploadService: UploadService);
     private initSettings;
     getSettings(): Promise<Settings & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
         _id: import("mongoose").Types.ObjectId;

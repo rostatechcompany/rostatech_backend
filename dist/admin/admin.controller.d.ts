@@ -20,6 +20,13 @@ import { NewsletterService } from '../newsletter/newsletter.service';
 import { PortfolioService } from '../portfolio/portfolio.service';
 import { CreatePortfolioDto } from '../portfolio/dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from '../portfolio/dto/update-portfolio.dto';
+import { UploadService } from '../upload/upload.service';
+import { CategoriesService } from '../categories/categories.service';
+import { CreateCategoryDto } from '../categories/dto/create-category.dto';
+import { UpdateCategoryDto } from '../categories/dto/update-category.dto';
+import { ArticleService } from '../article/article.service';
+import { CreateArticleDto } from '../article/dto/create-article.dto';
+import { UpdateArticleDto } from '../article/dto/update-article.dto';
 export declare class AdminController {
     private readonly adminService;
     private readonly cooperationTypesService;
@@ -28,7 +35,10 @@ export declare class AdminController {
     private readonly siteContentService;
     private readonly newsletterService;
     private readonly portfolioService;
-    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService, siteContentService: SiteContentService, newsletterService: NewsletterService, portfolioService: PortfolioService);
+    private readonly uploadService;
+    private readonly categoriesService;
+    private readonly articleService;
+    constructor(adminService: AdminService, cooperationTypesService: CooperationTypesService, jobApplicationsService: JobApplicationsService, consultationService: ConsultationService, siteContentService: SiteContentService, newsletterService: NewsletterService, portfolioService: PortfolioService, uploadService: UploadService, categoriesService: CategoriesService, articleService: ArticleService);
     findAll(req: any): Promise<{
         createdAtJalali: string;
         username: string;
@@ -307,6 +317,76 @@ export declare class AdminController {
         };
     }>;
     removePortfolio(id: string): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    uploadImage(file: Express.Multer.File, folder?: string): Promise<{
+        success: boolean;
+        data: {
+            url: string;
+        };
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    deleteImage(url: string): Promise<{
+        success: boolean;
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    createCategories(dto: CreateCategoryDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    findAllCategories(): Promise<(import("../categories/schemas/category.schema").Category & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    })[]>;
+    updateCategories(id: string, dto: UpdateCategoryDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    removeCategories(id: string): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    createArticle(dto: CreateArticleDto, req: any): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+        id: import("mongoose").Types.ObjectId;
+        slug: string;
+    }>;
+    findAllArticle(page?: string, limit?: string): Promise<{
+        data: any[];
+        meta: {
+            page: number;
+            limit: number;
+            total: number;
+            totalPages: number;
+        };
+    }>;
+    findOne(id: string): Promise<any>;
+    updateArticle(id: string, dto: UpdateArticleDto): Promise<{
+        message: {
+            fa: string;
+            en: string;
+        };
+    }>;
+    removeArticle(id: string): Promise<{
         message: {
             fa: string;
             en: string;
