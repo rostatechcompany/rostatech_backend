@@ -16,6 +16,7 @@ export declare class Admin {
     role: AdminRole;
     isActive: boolean;
     status: AdminStatus;
+    currentJti?: string;
 }
 export declare const AdminSchema: import("mongoose").Schema<Admin, import("mongoose").Model<Admin, any, any, any, any, any, Admin>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Admin, Document<unknown, {}, Admin, {
     id: string;
@@ -72,6 +73,15 @@ export declare const AdminSchema: import("mongoose").Schema<Admin, import("mongo
         id: string;
     }> | undefined;
     status?: import("mongoose").SchemaDefinitionProperty<AdminStatus, Admin, Document<unknown, {}, Admin, {
+        id: string;
+    }, import("mongoose").DefaultSchemaOptions> & Omit<Admin & {
+        _id: import("mongoose").Types.ObjectId;
+    } & {
+        __v: number;
+    }, "id"> & {
+        id: string;
+    }> | undefined;
+    currentJti?: import("mongoose").SchemaDefinitionProperty<string | undefined, Admin, Document<unknown, {}, Admin, {
         id: string;
     }, import("mongoose").DefaultSchemaOptions> & Omit<Admin & {
         _id: import("mongoose").Types.ObjectId;

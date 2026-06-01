@@ -29,6 +29,7 @@ let Admin = class Admin {
     role;
     isActive;
     status;
+    currentJti;
 };
 exports.Admin = Admin;
 __decorate([
@@ -66,6 +67,10 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], Admin.prototype, "status", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Admin.prototype, "currentJti", void 0);
 exports.Admin = Admin = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], Admin);

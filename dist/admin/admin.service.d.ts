@@ -14,6 +14,7 @@ export declare class AdminService {
         role: AdminRole;
         isActive: boolean;
         status: AdminStatus;
+        currentJti?: string;
         _id: import("mongoose").Types.ObjectId;
         $locals: Record<string, unknown>;
         $op: "save" | "validate" | "remove" | null;
@@ -34,6 +35,7 @@ export declare class AdminService {
         role: AdminRole;
         isActive: boolean;
         status: AdminStatus;
+        currentJti?: string;
         _id: import("mongoose").Types.ObjectId;
         $locals: Record<string, unknown>;
         $op: "save" | "validate" | "remove" | null;

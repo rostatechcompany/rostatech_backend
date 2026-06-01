@@ -44,6 +44,9 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         if (admin.status !== admin_schema_1.AdminStatus.ACTIVE) {
             throw new common_1.UnauthorizedException('Admin account is not active');
         }
+        if (!admin.currentJti || admin.currentJti !== payload.jti) {
+            throw new common_1.UnauthorizedException('Token is invalid (logout)');
+        }
         return {
             userId: admin._id.toString(),
             username: admin.username,

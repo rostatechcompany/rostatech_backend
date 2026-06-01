@@ -44,6 +44,9 @@ export class Admin {
     default: AdminStatus.PENDING 
   })
   status!: AdminStatus;
+
+  @Prop()
+  currentJti?: string;
 }
 
 export const AdminSchema = SchemaFactory.createForClass(Admin);

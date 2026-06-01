@@ -2,11 +2,14 @@ import {
   Controller, 
   Post,
   Body, 
+  UseGuards, 
+  Request
 } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterAdminDto } from './dto/register-admin.dto';
 import { LoginDto } from './dto/login.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -29,5 +32,13 @@ export class AuthController {
   @ApiOperation({ summary: 'Admin Login' })
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'logout' })
+  async logout(@Request() req) {
+    return this.authService.logout(req.user.userId);
   }
 }

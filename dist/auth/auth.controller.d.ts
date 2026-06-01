@@ -15,11 +15,18 @@ export declare class AuthController {
     }>;
     login(loginDto: LoginDto): Promise<{
         access_token: string;
+        expiresAt: string;
         admin: {
             id: import("mongoose").Types.ObjectId;
             username: string;
             fullName: string;
             role: import("../admin/schemas/admin.schema").AdminRole;
+        };
+    }>;
+    logout(req: any): Promise<{
+        message: {
+            fa: string;
+            en: string;
         };
     }>;
 }

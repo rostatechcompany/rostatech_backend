@@ -20,11 +20,18 @@ export declare class AuthService {
     }>;
     login(loginDto: LoginDto): Promise<{
         access_token: string;
+        expiresAt: string;
         admin: {
             id: import("mongoose").Types.ObjectId;
             username: string;
             fullName: string;
             role: AdminRole;
+        };
+    }>;
+    logout(adminId: string): Promise<{
+        message: {
+            fa: string;
+            en: string;
         };
     }>;
 }

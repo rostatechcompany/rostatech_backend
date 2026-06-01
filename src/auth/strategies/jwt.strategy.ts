@@ -36,6 +36,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Admin account is not active');
     }
     
+    if (!admin.currentJti || admin.currentJti !== payload.jti) {
+      throw new UnauthorizedException('Token is invalid (logout)');
+    }
     return { 
       userId: admin._id.toString(), 
       username: admin.username, 

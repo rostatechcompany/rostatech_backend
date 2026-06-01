@@ -53,6 +53,7 @@ const jwt_1 = require("@nestjs/jwt");
 const bcrypt = __importStar(require("bcrypt"));
 const admin_schema_1 = require("../admin/schemas/admin.schema");
 const config_1 = require("@nestjs/config");
+const uuid_1 = require("uuid");
 let AuthService = class AuthService {
     adminModel;
     jwtService;
@@ -121,13 +122,21 @@ let AuthService = class AuthService {
         if (admin.status === admin_schema_1.AdminStatus.REJECTED) {
             throw new common_1.UnauthorizedException('حساب شما رد شده است');
         }
+        const jti = (0, uuid_1.v4)();
         const payload = {
             sub: admin._id,
             username: admin.username,
             role: admin.role,
+            jti,
         };
+        const access_token = this.jwtService.sign(payload);
+        admin.currentJti = jti;
+        await admin.save();
+        const decoded = this.jwtService.decode(access_token);
+        const expiresAt = new Date(decoded.exp * 1000).toISOString();
         return {
-            access_token: this.jwtService.sign(payload),
+            access_token,
+            expiresAt,
             admin: {
                 id: admin._id,
                 username: admin.username,
@@ -135,6 +144,13 @@ let AuthService = class AuthService {
                 role: admin.role,
             }
         };
+    }
+    async logout(adminId) {
+        await this.adminModel.findByIdAndUpdate(adminId, {
+            $unset: { currentJti: '' },
+        });
+        return { message: { fa: 'با موفقیت خارج شدید',
+                en: 'You have successfully logged out' } };
     }
 };
 exports.AuthService = AuthService;

@@ -12,6 +12,7 @@ import { Admin, AdminDocument, AdminRole, AdminStatus } from '../admin/schemas/a
 import { RegisterAdminDto } from './dto/register-admin.dto';
 import { LoginDto } from './dto/login.dto';
 import { ConfigService } from '@nestjs/config';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -103,15 +104,26 @@ export class AuthService {
       throw new UnauthorizedException('حساب شما رد شده است');
     }
 
+    const jti = uuidv4();
     // Generate token
     const payload = {
       sub: admin._id,
       username: admin.username,
       role: admin.role,
+      jti,
     };
 
+    const access_token = this.jwtService.sign(payload);
+
+    admin.currentJti = jti;
+    await admin.save();
+
+    const decoded = this.jwtService.decode(access_token) as any;
+    const expiresAt = new Date(decoded.exp * 1000).toISOString();
+
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token,
+      expiresAt,
       admin: {
         id: admin._id,
         username: admin.username,
@@ -119,5 +131,14 @@ export class AuthService {
         role: admin.role,
       }
     };
+  }
+
+  // logout
+  async logout(adminId: string) {
+    await this.adminModel.findByIdAndUpdate(adminId, {
+      $unset: { currentJti: '' },
+    });
+    return { message: { fa:'با موفقیت خارج شدید', 
+                        en: 'You have successfully logged out'} };
   }
 }
