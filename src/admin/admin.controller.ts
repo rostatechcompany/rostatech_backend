@@ -44,6 +44,7 @@ import { ArticleService } from '../article/article.service';
 import { CreateArticleDto } from '../article/dto/create-article.dto';
 import { UpdateArticleDto } from '../article/dto/update-article.dto';
 import { UpdateAboutPageDto} from '../site-content/dto/about-page.dto';
+import { ChangeUsernameDto } from './dto/change-username.dto';
 
 @ApiTags('Admin Management')
 @Controller('admin')
@@ -148,10 +149,10 @@ export class AdminController {
   @ApiOperation({ summary: 'Change username'})
   changeUsername(
     @Param('id') id: string,
-    @Body('username') username: string,
+    @Body() changeUsernameDto: ChangeUsernameDto,
     @Request() req
   ) {
-    return this.adminService.changeUsername(id, username, req.user);
+    return this.adminService.changeUsername(id, changeUsernameDto.username, req.user);
   }
 
   @Put('change-my-password')
