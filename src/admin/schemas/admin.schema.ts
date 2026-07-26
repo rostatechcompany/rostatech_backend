@@ -14,7 +14,7 @@ export enum AdminStatus {
   ACTIVE = 'active',
 }
 
-@Schema({ timestamps: true, collection: 'rostatech_admins'})
+@Schema({ timestamps: true, collection: 'admins'})
 export class Admin {
   @Prop({ required: true, unique: true })
   username!: string;

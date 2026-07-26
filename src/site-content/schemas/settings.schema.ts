@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type SettingsDocument = Settings & Document;
 
-@Schema({ timestamps: true, collection: 'rostatech_sociallinks' })
+@Schema({ timestamps: true, collection: 'sociallinks' })
 export class SocialLink {
   @Prop({ required: true })
   name!: string;
@@ -12,7 +12,7 @@ export class SocialLink {
   url!: string;
 }
 
-@Schema({ timestamps: true, collection: 'rostatech_settings' })
+@Schema({ timestamps: true, collection: 'settings' })
 export class Settings {
   @Prop()
   address!: string;

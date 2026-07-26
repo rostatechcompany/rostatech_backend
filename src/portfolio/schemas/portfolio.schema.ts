@@ -15,7 +15,7 @@ export class TeamMemberInfo {
   position!: string;
 }
 
-@Schema({ timestamps: true, collection: 'rostatech_portfolios'})
+@Schema({ timestamps: true, collection: 'portfolios'})
 export class Portfolio {
   @Prop({ required: true })
   desktopImageUrl!: string;

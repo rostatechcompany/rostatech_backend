@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type TeamMemberDocument = TeamMember & Document;
 
-@Schema({ timestamps: true ,collection: 'rostatech_teammember'})
+@Schema({ timestamps: true ,collection: 'teammember'})
 export class TeamMember {
   @Prop({ required: true })
   photoUrl!: string;

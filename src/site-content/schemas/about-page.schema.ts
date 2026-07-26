@@ -3,7 +3,7 @@ import { Document, Schema as MongooseSchema } from 'mongoose';
 
 export type AboutPageDocument = AboutPage & Document;
 
-@Schema({ timestamps: true, collection: 'rostatech_aboutpages' })
+@Schema({ timestamps: true, collection: 'aboutpages' })
 export class AboutPage {
   @Prop({ required: true })
   title!: string;

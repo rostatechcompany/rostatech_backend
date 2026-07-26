@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type NewsletterDocument = Newsletter & Document;
 
-@Schema({ timestamps: true, collection: 'rostatech_newlatters' })
+@Schema({ timestamps: true, collection: 'newlatters' })
 export class Newsletter {
   @Prop({ required: true, unique: true })
   phoneNumber!: string;

@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type CategoryDocument = Category & Document;
 
-@Schema({ timestamps: true, collection: 'rostatech_categories' })
+@Schema({ timestamps: true, collection: 'categories' })
 export class Category {
   @Prop({ required: true, unique: true })
   title!: string;
