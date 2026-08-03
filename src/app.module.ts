@@ -14,6 +14,7 @@ import { PortfolioModule } from './portfolio/portfolio.module';
 import { UploadModule } from './upload/upload.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ArticleModule } from './article/article.module';
+import { ContactRequestModule } from './contact-request/contact-request.module';
 
 @Module({
   imports: [
@@ -53,6 +54,8 @@ import { ArticleModule } from './article/article.module';
     CategoriesModule,
     
     ArticleModule,
+    
+    ContactRequestModule,
 
   ],
   controllers: [AppController],

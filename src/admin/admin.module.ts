@@ -12,7 +12,8 @@ import { NewsletterModule}from '../newsletter/newsletter.module';
 import { PortfolioModule}from '../portfolio/portfolio.module';
 import { UploadModule} from '../upload/upload.module';
 import { CategoriesModule}from '../categories/categories.module';
-import { ArticleModule} from 'src/article/article.module';
+import { ArticleModule} from '../article/article.module';
+import { ContactRequestModule } from '../contact-request/contact-request.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ArticleModule} from 'src/article/article.module';
     UploadModule,
     CategoriesModule,
     ArticleModule,
+    ContactRequestModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

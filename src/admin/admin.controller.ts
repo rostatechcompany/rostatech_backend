@@ -45,6 +45,7 @@ import { CreateArticleDto } from '../article/dto/create-article.dto';
 import { UpdateArticleDto } from '../article/dto/update-article.dto';
 import { UpdateAboutPageDto} from '../site-content/dto/about-page.dto';
 import { ChangeUsernameDto } from './dto/change-username.dto';
+import { ContactRequestService } from '../contact-request/contact-request.service';
 
 @ApiTags('Admin Management')
 @Controller('admin')
@@ -58,6 +59,7 @@ export class AdminController {
               private readonly portfolioService: PortfolioService,
               private readonly categoriesService: CategoriesService,
               private readonly articleService: ArticleService,
+              private readonly contactRequestService: ContactRequestService,
   ) {}
 
   @Get()
@@ -594,4 +596,29 @@ export class AdminController {
   @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
   @Roles(AdminRole.SUPER_ADMIN)
   removeArticle(@Param('id') id: string) { return this.articleService.remove(id); }
+
+  // for contact requests
+  // =======================================
+  @Get('contact-requests')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  findAllContactRequests(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const p = page ? parseInt(page, 10) : 1;
+    const l = limit ? parseInt(limit, 10) : 10;
+    return this.contactRequestService.findAll(p, l);
+  }
+
+  @Delete('contact-requests/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(AdminRole.ADMIN, AdminRole.SUPER_ADMIN)
+  @ApiBearerAuth()
+  removeContactRequest(@Param('id') id: string) {
+    return this.contactRequestService.remove(id);
+  }
 }
